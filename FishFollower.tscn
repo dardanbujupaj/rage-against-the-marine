@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://superfish.png" type="Texture" id=1]
+[ext_resource path="res://FishFollower.gd" type="Script" id=2]
+
+[node name="FishFollower" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Superfish" type="Sprite" parent="."]
+scale = Vector2( 0.2, 0.2 )
+texture = ExtResource( 1 )

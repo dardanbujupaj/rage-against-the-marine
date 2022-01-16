@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Character.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Ship.tscn" type="PackedScene" id=3]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
@@ -9,6 +10,57 @@ script = ExtResource( 1 )
 [node name="Character" parent="." instance=ExtResource( 2 )]
 position = Vector2( 262, 292 )
 
+[node name="Followers" type="Node2D" parent="."]
+position = Vector2( 325, 436 )
+
+[node name="Props" type="Node2D" parent="."]
+position = Vector2( 917, 288 )
+
+[node name="Ship" parent="." instance=ExtResource( 3 )]
+position = Vector2( 917, 288 )
+
 [node name="Water" type="Polygon2D" parent="."]
-color = Color( 0.160784, 0.207843, 0.737255, 0.588235 )
-polygon = PoolVector2Array( 0, 298.947, 51.2, 297.85, 102.4, 296.735, 153.6, 295.876, 204.8, 295.552, 256, 295.902, 307.2, 296.884, 358.4, 298.141, 409.6, 299.139, 460.8, 299.557, 512, 299.549, 563.2, 299.449, 614.4, 299.382, 665.6, 299.475, 716.8, 300.025, 768, 301.197, 819.2, 302.857, 870.4, 304.686, 921.6, 306.318, 972.8, 307.168, 1024, 306.765, 1024, 600, 0, 600 )
+z_index = 1
+color = Color( 0, 0.133333, 0.8, 0.286275 )
+antialiased = true
+texture_offset = Vector2( 1165.27, 0 )
+polygon = PoolVector2Array( 0, 301.407, 21.3333, 302.97, 42.6667, 305.56, 64, 308.074, 85.3333, 309.405, 106.667, 309.165, 128, 307.814, 149.333, 306.413, 170.667, 305.539, 192, 304.446, 213.333, 302.733, 234.667, 301.454, 256, 301.393, 277.333, 301.764, 298.667, 301.035, 320, 298.879, 341.333, 296.621, 362.667, 295.311, 384, 294.363, 405.333, 293.421, 426.667, 292.861, 448, 293.333, 469.333, 294.688, 490.667, 295.761, 512, 295.631, 533.333, 294.605, 554.667, 293.617, 576, 293.029, 597.333, 292.891, 618.667, 293.166, 640, 293.773, 661.333, 294.56, 682.667, 294.827, 704, 294.215, 725.333, 293.586, 746.667, 293.731, 768, 294.473, 789.333, 295.7, 810.667, 297.322, 832, 299.077, 853.333, 300.315, 874.667, 300.524, 896, 299.823, 917.333, 298.501, 938.667, 296.922, 960, 296.116, 981.333, 296.333, 1002.67, 296.728, 1024, 296.603, 1024, 600, 0, 600 )
+
+[node name="SpeedTimer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
+[node name="ShipSpawnTimer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -40.0
+margin_bottom = 40.0
+grow_horizontal = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Distance" type="Label" parent="CanvasLayer/VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 14.0
+
+[node name="Speed" type="Label" parent="CanvasLayer/VBoxContainer"]
+margin_top = 18.0
+margin_right = 40.0
+margin_bottom = 32.0
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="Camera" type="Camera2D" parent="."]
+position = Vector2( 512, 300 )
+current = true
+
+[connection signal="fish_freed" from="Ship" to="." method="_on_Ship_fish_freed"]
+[connection signal="timeout" from="SpeedTimer" to="." method="_on_Timer_timeout"]
+[connection signal="timeout" from="ShipSpawnTimer" to="." method="_on_ShipSpawnTimer_timeout"]

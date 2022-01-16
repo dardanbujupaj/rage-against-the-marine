@@ -24,11 +24,14 @@ func _ready() -> void:
 func is_in_water() -> bool:
 	return position.y > WATER_LEVEL
 
+
 func _process(delta: float) -> void:
 	$Label.text = str(velocity.y)
 	rotation = velocity.y / MAX_VELOCITY_Y
 
+
 func _physics_process(delta: float) -> void:
+	
 	if is_in_water():
 		if Input.is_action_pressed("up"):
 			velocity.y -= JUMP_BOUYANCY * delta
@@ -45,6 +48,10 @@ func _physics_process(delta: float) -> void:
 				velocity.y += FLOAT_GRAVITY * delta
 			else:
 				velocity.y += FALL_GRAVITY * delta
+	
+	# give a boost when starting to jump
+	if abs(300.0 - position.y) < 10.0 and abs(velocity.y) < 10.0:
+		velocity.y -= 50.0
 	
 	velocity.y = clamp(velocity.y, -MAX_VELOCITY_Y, MAX_VELOCITY_Y)
 	velocity = move_and_slide(velocity)
