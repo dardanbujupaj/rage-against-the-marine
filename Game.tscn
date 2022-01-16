@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Game.gd" type="Script" id=1]
+[ext_resource path="res://Character.tscn" type="PackedScene" id=2]
+
+[node name="Game" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Character" parent="." instance=ExtResource( 2 )]
+position = Vector2( 262, 292 )
+
+[node name="Water" type="Polygon2D" parent="."]
+color = Color( 0.160784, 0.207843, 0.737255, 0.588235 )
+polygon = PoolVector2Array( 0, 298.947, 51.2, 297.85, 102.4, 296.735, 153.6, 295.876, 204.8, 295.552, 256, 295.902, 307.2, 296.884, 358.4, 298.141, 409.6, 299.139, 460.8, 299.557, 512, 299.549, 563.2, 299.449, 614.4, 299.382, 665.6, 299.475, 716.8, 300.025, 768, 301.197, 819.2, 302.857, 870.4, 304.686, 921.6, 306.318, 972.8, 307.168, 1024, 306.765, 1024, 600, 0, 600 )
