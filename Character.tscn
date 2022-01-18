@@ -1,7 +1,31 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://superfish.png" type="Texture" id=1]
 [ext_resource path="res://Character.gd" type="Script" id=2]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
 
 [node name="Character" type="KinematicBody2D"]
 script = ExtResource( 2 )
@@ -16,8 +40,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Superfish" type="Sprite" parent="."]
-texture = ExtResource( 1 )
+[node name="Superfish" type="AnimatedSprite" parent="."]
+frames = SubResource( 5 )
+frame = 1
+playing = true
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PoolVector2Array( -32, 17, -31, -15, -9, -1, 17, -13, 32, -1, 22, 19, 2, 19, -11, 5 )
+polygon = PoolVector2Array( -66, -8, -55, -9, -32, 1, -26, -2, -8, -19, -10, -32, -14, -38, -13, -44, 3, -41, 15, -29, 32, -28, 57, -16, 60, -5, 33, 19, 17, 23, 8, 32, -10, 38, -17, 34, -5, 23, -29, 18, -48, 35, -63, 38, -63, 33, -51, 21, -52, 8 )

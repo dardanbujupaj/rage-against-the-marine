@@ -8,9 +8,11 @@ onready var water := $Water
 
 
 onready var distance_label := $CanvasLayer/VBoxContainer/Distance
-onready var speed_label := $CanvasLayer/VBoxContainer/Distance
+onready var speed_label := $CanvasLayer/Debug/Speed
+onready var fish_speed := $CanvasLayer/Debug/FishSpeed
 
-onready var camera := $Camera
+onready var camera_position := $CameraPosition
+onready var camera := $CameraPosition/Camera
 onready var swarm_cam_tween := $Tween
 
 var speed = 200.0
@@ -30,6 +32,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	distance += delta * speed
 	update_water(distance)
+	
+	update_labels()
 
 
 func _unhandled_key_input(event: InputEventKey) -> void:
@@ -37,6 +41,8 @@ func _unhandled_key_input(event: InputEventKey) -> void:
 		spawn_follower(Vector2())
 	if event.is_pressed() and event.scancode == KEY_S:
 		toggle_swarm_cam()
+	if event.is_pressed() and event.scancode == KEY_K:
+		$AnimationPlayer.play("awaken")
 
 
 func update_water(offset: float = 0.0) -> void:
@@ -56,9 +62,19 @@ func update_water(offset: float = 0.0) -> void:
 	water.texture_offset.x = offset
 
 
+var speed_increase = 20
+
 func update_speed() -> void:
-	speed *= 1.1
+	speed += speed_increase
+	speed_increase += 1
 	get_tree().set_group("ships", "speed", speed)
+
+
+func update_labels() -> void:
+	if distance_label != null:
+		distance_label.text = str(distance)
+		speed_label.text = str(speed)
+		fish_speed.text = str($Character.velocity.y)
 
 
 func _on_Timer_timeout() -> void:
@@ -75,10 +91,9 @@ func _on_ShipSpawnTimer_timeout() -> void:
 
 
 func spawn_follower(position: Vector2) -> void:
-	for _i in range(1 + randi() % 5):
-		var fish = preload("res://FishFollower.tscn").instance()
-		fish.position = position - $Followers.position
-		$Followers.call_deferred("add_child", fish)
+	var fish = preload("res://FishFollower.tscn").instance()
+	fish.position = position - $Followers.position
+	$Followers.call_deferred("add_child", fish)
 
 
 func _on_Ship_fish_freed(pos: Vector2, amount: int) -> void:
@@ -94,8 +109,8 @@ func toggle_swarm_cam() -> void:
 	var zoom = Vector2(0.3, 0.3) if swarm_cam else Vector2(1.0, 1.0)
 	
 	swarm_cam_tween.stop_all()
-	swarm_cam_tween.interpolate_property(camera, "position", camera.position, target, 0.5, Tween.TRANS_QUAD, Tween.EASE_OUT)
+	swarm_cam_tween.interpolate_property(camera_position, "position", camera_position.position, target, 0.5, Tween.TRANS_QUAD, Tween.EASE_OUT)
 	swarm_cam_tween.interpolate_property(camera, "zoom", camera.zoom, zoom, 0.5, Tween.TRANS_QUAD, Tween.EASE_OUT)
 	swarm_cam_tween.start()
 	
-	
+

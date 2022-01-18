@@ -17,6 +17,6 @@ func _process(delta: float) -> void:
 	time += delta
 	var offset = Vector2(noise.get_noise_1d(time), noise.get_noise_1d(-time))
 	var target = offset * 200
-	var mouse_distance = target - get_local_mouse_position()
-	target += (mouse_distance).normalized() / max(0.001, mouse_distance.length_squared()) * 100
+	var mouse_distance = -get_local_mouse_position()
+	target += (mouse_distance).normalized() / max(1.0, mouse_distance.length_squared() / 1000) * 20
 	position = lerp(position, target, 5 * delta)

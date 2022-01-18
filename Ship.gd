@@ -16,7 +16,9 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	position.x -= speed * delta
-	position.y = 280.0 + noise.get_noise_1d(position.x) * 30
+	var next_y = 280.0 + noise.get_noise_1d(position.x) * 30
+	rotation = (position.y - next_y) / 10
+	position.y = next_y
 	
 	if position.x < -100.0:
 		queue_free()
@@ -26,5 +28,21 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_Ship_body_entered(body: Node) -> void:
-	emit_signal("fish_freed", position, 1 + randi() % 5)
+	var impact = abs(body.velocity.y) / body.MAX_VELOCITY_Y
+	var explosion = preload("res://Explosion.tscn").instance()
+	explosion.scale *= impact * 2
+	add_child(explosion)
 	
+	get_tree().call_group("shake_cameras", "add_trauma", impact)
+	
+	explosion.global_position = body.global_position
+	emit_signal("fish_freed", position, int(impact * 5))
+	
+
+
+func _on_AnimationTimer_timeout() -> void:
+	$Ship.play("fish")
+
+
+func _on_Ship_animation_finished() -> void:
+	$Ship.play("default")
