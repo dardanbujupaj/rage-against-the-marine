@@ -3,6 +3,8 @@
 [ext_resource path="res://kraken_arm.png" type="Texture" id=1]
 
 [node name="KrakenArm" type="StaticBody2D"]
+collision_layer = 0
+collision_mask = 2
 
 [node name="KrakenArm" type="Sprite" parent="."]
 position = Vector2( -25, 212 )
