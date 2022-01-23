@@ -333,11 +333,11 @@ margin_top = 10.0
 margin_right = 156.0
 margin_bottom = 114.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/SwarmContainer/VBoxContainer"]
+[node name="Actions" type="HBoxContainer" parent="CanvasLayer/SwarmContainer/VBoxContainer"]
 margin_right = 136.0
 margin_bottom = 64.0
 
-[node name="FishRain" type="TextureButton" parent="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer"]
+[node name="FishRain" type="TextureButton" parent="CanvasLayer/SwarmContainer/VBoxContainer/Actions"]
 margin_right = 64.0
 margin_bottom = 64.0
 hint_tooltip = "Fish Rain"
@@ -348,7 +348,7 @@ texture_normal = SubResource( 17 )
 texture_hover = ExtResource( 9 )
 texture_disabled = ExtResource( 17 )
 
-[node name="SwarmTornado" type="TextureButton" parent="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer"]
+[node name="SwarmTornado" type="TextureButton" parent="CanvasLayer/SwarmContainer/VBoxContainer/Actions"]
 visible = false
 margin_left = 72.0
 margin_right = 136.0
@@ -359,7 +359,7 @@ texture_normal = SubResource( 16 )
 texture_hover = ExtResource( 20 )
 texture_disabled = ExtResource( 18 )
 
-[node name="AwakeTheKraken" type="TextureButton" parent="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer"]
+[node name="AwakeTheKraken" type="TextureButton" parent="CanvasLayer/SwarmContainer/VBoxContainer/Actions"]
 margin_left = 72.0
 margin_right = 136.0
 margin_bottom = 64.0
@@ -537,9 +537,9 @@ scroll_active = false
 
 [connection signal="timeout" from="SpeedTimer" to="." method="_on_Timer_timeout"]
 [connection signal="timeout" from="ShipSpawnTimer" to="." method="_on_ShipSpawnTimer_timeout"]
-[connection signal="pressed" from="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/FishRain" to="." method="_on_FishRain_pressed"]
-[connection signal="pressed" from="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/SwarmTornado" to="." method="_on_SwarmTornado_pressed"]
-[connection signal="pressed" from="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/AwakeTheKraken" to="." method="_on_SwarmTornado_pressed"]
+[connection signal="pressed" from="CanvasLayer/SwarmContainer/VBoxContainer/Actions/FishRain" to="." method="_on_FishRain_pressed"]
+[connection signal="pressed" from="CanvasLayer/SwarmContainer/VBoxContainer/Actions/SwarmTornado" to="." method="_on_SwarmTornado_pressed"]
+[connection signal="pressed" from="CanvasLayer/SwarmContainer/VBoxContainer/Actions/AwakeTheKraken" to="." method="_on_SwarmTornado_pressed"]
 [connection signal="mouse_entered" from="Menu/Menu/Start" to="." method="_on_Button_mouse_entered"]
 [connection signal="pressed" from="Menu/Menu/Start" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="Menu/Menu/Start" to="." method="_on_Start_pressed"]

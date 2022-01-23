@@ -13,6 +13,8 @@ margin_left = -83.0
 margin_top = -232.0
 margin_right = 77.0
 margin_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource( 3 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -20,8 +22,8 @@ __meta__ = {
 }
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
-margin_right = 185.0
-margin_bottom = 244.0
+margin_right = 271.0
+margin_bottom = 324.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

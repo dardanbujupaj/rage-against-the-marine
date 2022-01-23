@@ -7,8 +7,11 @@ const WATER_OFFSET := 300.0 # to make sure water fills camera area
 onready var water := $Water
 onready var character := $Character
 
-
+onready var score_container := $CanvasLayer/ScoreContainer
 onready var score_label := $CanvasLayer/ScoreContainer/HBoxContainer/Score
+
+
+
 
 onready var debug := $CanvasLayer/Debug
 onready var distance_label := $CanvasLayer/VBoxContainer/Distance
@@ -25,10 +28,12 @@ onready var camera := $CameraPosition/Camera
 onready var swarm_cam_tween := $Tween
 
 
+onready var swarm_container := $CanvasLayer/SwarmContainer
 onready var swarm_count = $CanvasLayer/SwarmContainer/VBoxContainer/Swarm/Swarm
-onready var fish_rain = $CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/FishRain
-onready var swarm_tornado = $CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/SwarmTornado
-onready var awake_the_kraken = $CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/AwakeTheKraken
+onready var swarm_actions = $CanvasLayer/SwarmContainer/VBoxContainer/Actions
+onready var fish_rain = $CanvasLayer/SwarmContainer/VBoxContainer/Actions/FishRain
+onready var swarm_tornado = $CanvasLayer/SwarmContainer/VBoxContainer/Actions/SwarmTornado
+onready var awake_the_kraken = $CanvasLayer/SwarmContainer/VBoxContainer/Actions/AwakeTheKraken
 
 
 var score := 0
@@ -120,6 +125,8 @@ func process_state() -> void:
 			if character.position.y < 0:
 				tutorial_state = TutorialState.SHIP
 				SoundEngine.play_sound("TutorialSuccess")
+				swarm_actions.hide()
+				swarm_container.show()
 				$ShipSpawnTimer.start()
 				tutorial_text.bbcode_text = "[u]Free fishes[/u] by [u]hitting ships[/u] from above or below.\n The harder the better! Free [u]10[/u] Fish!"
 		TutorialState.SHIP:
@@ -127,14 +134,19 @@ func process_state() -> void:
 				SoundEngine.play_sound("TutorialSuccess")
 				tutorial_text.bbcode_text = "Freed fishes can help you fight! Press %s or the button top left to unleash a 'Fish Rain'!" % str(Keymap.input_to_text(Keymap.input_for_action("swarm_action_1")))
 				tutorial_state = TutorialState.ACTIONS
+				swarm_actions.show()
+				
 		TutorialState.ACTIONS:
 			if last_action != "":
 				SoundEngine.play_sound("TutorialSuccess")
 				tutorial_text.bbcode_text = "Nice! %s\nNow go and free as many fish as you can!" % last_action
 				tutorial_state = TutorialState.FINISHED
+				
+				
+				score = 0
+				score_container.show()
+				
 				yield(get_tree().create_timer(5), "timeout")
-				
-				
 				tutorial.hide()
 			
 

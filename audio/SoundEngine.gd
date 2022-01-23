@@ -1,6 +1,6 @@
 extends Node
 
-const POOL_SIZE = 8
+const POOL_SIZE = 32
 
 const sounds = {
 	

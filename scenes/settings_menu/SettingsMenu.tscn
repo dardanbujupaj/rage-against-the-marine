@@ -12,6 +12,8 @@ margin_left = -183.0
 margin_top = -188.0
 margin_right = 183.0
 margin_bottom = 188.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource( 2 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -20,7 +22,7 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_right = 366.0
-margin_bottom = 376.0
+margin_bottom = 438.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -60,6 +62,25 @@ selected = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 52.0
+margin_right = 366.0
+margin_bottom = 84.0
+
+[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer3"]
+margin_right = 60.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+text = "Font"
+
+[node name="FontSize" type="SpinBox" parent="VBoxContainer/HBoxContainer3"]
+margin_left = 68.0
+margin_right = 366.0
+margin_bottom = 32.0
+min_value = 12.0
+max_value = 32.0
+value = 12.0
 
 [node name="HSeparator3" type="HSeparator" parent="VBoxContainer"]
 margin_top = 132.0
@@ -181,7 +202,10 @@ margin_right = 366.0
 margin_bottom = 376.0
 text = "Close"
 
+[connection signal="about_to_show" from="." to="." method="_on_SettingsMenu_about_to_show"]
+[connection signal="popup_hide" from="." to="." method="_on_SettingsMenu_popup_hide"]
 [connection signal="item_selected" from="VBoxContainer/HBoxContainer2/Font" to="." method="_on_Font_item_selected"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer3/FontSize" to="." method="_on_FontSize_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/MainVolume/Main" to="." method="_on_Main_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/MusicVolume/Music" to="." method="_on_Music_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/SoundVolume/Sound" to="." method="_on_Sound_value_changed"]

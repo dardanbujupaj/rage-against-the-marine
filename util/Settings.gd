@@ -1,6 +1,9 @@
 extends "res://util/PersistentProperties.gd"
 
-var font: String = "ChelseaMarket-Regular" setget _set_font, _get_font
+
+
+var font: String setget _set_font, _get_font
+var font_size: int setget _set_font_size, _get_font_size
 
 var main_volume: float = 0.75 setget _set_main_volume
 var sound_volume: float = 0.75 setget _set_sound_volume
@@ -48,3 +51,14 @@ func _get_font() -> String:
 	var font := preload("res://default_theme.tres").default_font as DynamicFont
 	var font_path := font.font_data.font_path
 	return font_path.get_file().trim_suffix("." + font_path.get_extension())
+
+
+func _set_font_size(new_size: int) -> void:
+	print(new_size)
+	var font := preload("res://default_theme.tres").default_font as DynamicFont
+	font.set_deferred("size", new_size)
+	
+	#font = new_font
+func _get_font_size() -> int:
+	var font := preload("res://default_theme.tres").default_font as DynamicFont
+	return font.size
