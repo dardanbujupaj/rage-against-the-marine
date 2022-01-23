@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Character.tscn" type="PackedScene" id=2]
@@ -8,6 +8,42 @@
 [ext_resource path="res://scenes/settings_menu/SettingsMenu.tscn" type="PackedScene" id=6]
 [ext_resource path="res://FishFollower.tscn" type="PackedScene" id=7]
 [ext_resource path="res://default_theme.tres" type="Theme" id=8]
+[ext_resource path="res://scenes/actions/fish_rain_button6.png" type="Texture" id=9]
+[ext_resource path="res://scenes/actions/fish_rain_button3.png" type="Texture" id=10]
+[ext_resource path="res://scenes/actions/fish_rain_button5.png" type="Texture" id=11]
+[ext_resource path="res://scenes/actions/fish_rain_button2.png" type="Texture" id=12]
+[ext_resource path="res://scenes/actions/fish_rain_button4.png" type="Texture" id=13]
+[ext_resource path="res://scenes/actions/fish_rain_button1.png" type="Texture" id=14]
+
+[sub_resource type="InputEventAction" id=6]
+action = "swarm_action_1"
+
+[sub_resource type="ShortCut" id=7]
+shortcut = SubResource( 6 )
+
+[sub_resource type="AnimatedTexture" id=5]
+frames = 5
+frame_0/texture = ExtResource( 14 )
+frame_1/texture = ExtResource( 12 )
+frame_1/delay_sec = 0.0
+frame_2/texture = ExtResource( 10 )
+frame_2/delay_sec = 0.0
+frame_3/texture = ExtResource( 13 )
+frame_3/delay_sec = 0.0
+frame_4/texture = ExtResource( 11 )
+frame_4/delay_sec = 0.0
+
+[sub_resource type="InputEventAction" id=8]
+action = "swarm_action_2"
+
+[sub_resource type="ShortCut" id=9]
+shortcut = SubResource( 8 )
+
+[sub_resource type="InputEventAction" id=10]
+action = "swarm_action_3"
+
+[sub_resource type="ShortCut" id=11]
+shortcut = SubResource( 10 )
 
 [sub_resource type="Animation" id=1]
 length = 0.001
@@ -159,38 +195,147 @@ wait_time = 5.0
 wait_time = 5.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+[node name="ScoreContainer" type="MarginContainer" parent="CanvasLayer"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -40.0
+margin_left = -105.0
 margin_bottom = 40.0
 grow_horizontal = 0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 10
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Distance" type="Label" parent="CanvasLayer/VBoxContainer"]
-margin_right = 84.0
-margin_bottom = 14.0
-text = "89453.41323"
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/ScoreContainer"]
+margin_top = 10.0
+margin_right = 170.0
+margin_bottom = 42.0
+grow_horizontal = 0
+theme = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Debug" type="VBoxContainer" parent="CanvasLayer"]
+[node name="Label" type="Label" parent="CanvasLayer/ScoreContainer/HBoxContainer"]
+margin_right = 82.0
+margin_bottom = 32.0
+text = "Score: "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="CanvasLayer/ScoreContainer/HBoxContainer"]
+margin_left = 90.0
+margin_right = 170.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 80, 0 )
+text = "0"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SwarmContainer" type="MarginContainer" parent="CanvasLayer"]
 margin_right = 40.0
 margin_bottom = 40.0
+theme = ExtResource( 8 )
+custom_constants/margin_top = 10
+custom_constants/margin_left = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/SwarmContainer"]
+margin_left = 20.0
+margin_top = 10.0
+margin_right = 228.0
+margin_bottom = 114.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/SwarmContainer/VBoxContainer"]
+margin_right = 208.0
+margin_bottom = 64.0
+
+[node name="FishRain" type="TextureButton" parent="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer"]
+margin_right = 64.0
+margin_bottom = 64.0
+disabled = true
+shortcut = SubResource( 7 )
+texture_normal = ExtResource( 14 )
+texture_hover = SubResource( 5 )
+texture_disabled = ExtResource( 9 )
+
+[node name="SwarmTornado" type="TextureButton" parent="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer"]
+margin_left = 72.0
+margin_right = 136.0
+margin_bottom = 64.0
+disabled = true
+shortcut = SubResource( 9 )
+texture_normal = ExtResource( 14 )
+texture_hover = SubResource( 5 )
+texture_disabled = ExtResource( 9 )
+
+[node name="AwakeTheKraken" type="TextureButton" parent="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer"]
+margin_left = 144.0
+margin_right = 208.0
+margin_bottom = 64.0
+disabled = true
+shortcut = SubResource( 11 )
+texture_normal = ExtResource( 14 )
+texture_hover = SubResource( 5 )
+texture_disabled = ExtResource( 9 )
+
+[node name="Swarm" type="HBoxContainer" parent="CanvasLayer/SwarmContainer/VBoxContainer"]
+margin_top = 72.0
+margin_right = 208.0
+margin_bottom = 104.0
+
+[node name="Label" type="Label" parent="CanvasLayer/SwarmContainer/VBoxContainer/Swarm"]
+margin_right = 87.0
+margin_bottom = 32.0
+mouse_filter = 1
+text = "Swarm:"
+
+[node name="Swarm" type="Label" parent="CanvasLayer/SwarmContainer/VBoxContainer/Swarm"]
+margin_left = 95.0
+margin_right = 110.0
+margin_bottom = 32.0
+mouse_filter = 1
+text = "0"
+
+[node name="Debug" type="VBoxContainer" parent="CanvasLayer"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -136.0
+margin_top = -112.0
+theme = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Speed" type="Label" parent="CanvasLayer/Debug"]
-margin_right = 40.0
-margin_bottom = 14.0
+margin_right = 136.0
+margin_bottom = 32.0
+mouse_filter = 1
 text = "220"
 
 [node name="FishSpeed" type="Label" parent="CanvasLayer/Debug"]
-margin_top = 18.0
-margin_right = 40.0
-margin_bottom = 32.0
+margin_top = 40.0
+margin_right = 136.0
+margin_bottom = 72.0
+mouse_filter = 1
+
+[node name="Distance" type="Label" parent="CanvasLayer/Debug"]
+margin_top = 80.0
+margin_right = 136.0
+margin_bottom = 112.0
+mouse_filter = 1
+text = "89453.41323"
 
 [node name="Tween" type="Tween" parent="."]
 pause_mode = 2
@@ -301,12 +446,15 @@ scroll_active = false
 
 [connection signal="timeout" from="SpeedTimer" to="." method="_on_Timer_timeout"]
 [connection signal="timeout" from="ShipSpawnTimer" to="." method="_on_ShipSpawnTimer_timeout"]
+[connection signal="pressed" from="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/FishRain" to="." method="_on_FishRain_pressed"]
+[connection signal="pressed" from="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/SwarmTornado" to="." method="_on_SwarmTornado_pressed"]
+[connection signal="pressed" from="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/AwakeTheKraken" to="." method="_on_AwakeTheKraken_pressed"]
 [connection signal="mouse_entered" from="Menu/Menu/Start" to="." method="_on_Button_mouse_entered"]
 [connection signal="pressed" from="Menu/Menu/Start" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="Menu/Menu/Start" to="." method="_on_Start_pressed"]
 [connection signal="mouse_entered" from="Menu/Menu/Keymap" to="." method="_on_Button_mouse_entered"]
-[connection signal="pressed" from="Menu/Menu/Keymap" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="Menu/Menu/Keymap" to="." method="_on_Keymap_pressed"]
+[connection signal="pressed" from="Menu/Menu/Keymap" to="." method="_on_Button_pressed"]
 [connection signal="mouse_entered" from="Menu/Menu/Settings" to="." method="_on_Button_mouse_entered"]
-[connection signal="pressed" from="Menu/Menu/Settings" to="." method="_on_Settings_pressed"]
 [connection signal="pressed" from="Menu/Menu/Settings" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Menu/Menu/Settings" to="." method="_on_Settings_pressed"]

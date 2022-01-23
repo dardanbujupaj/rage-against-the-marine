@@ -8,7 +8,9 @@ onready var water := $Water
 onready var character := $Character
 
 
+onready var score_label := $CanvasLayer/ScoreContainer/HBoxContainer/Score
 
+onready var debug := $CanvasLayer/Debug
 onready var distance_label := $CanvasLayer/VBoxContainer/Distance
 onready var speed_label := $CanvasLayer/Debug/Speed
 onready var fish_speed := $CanvasLayer/Debug/FishSpeed
@@ -22,6 +24,15 @@ onready var camera_position := $CameraPosition
 onready var camera := $CameraPosition/Camera
 onready var swarm_cam_tween := $Tween
 
+
+onready var swarm_count = $CanvasLayer/SwarmContainer/VBoxContainer/Swarm/Swarm
+onready var fish_rain = $CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/FishRain
+onready var swarm_tornado = $CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/SwarmTornado
+onready var awake_the_kraken = $CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/AwakeTheKraken
+
+
+var score := 0
+
 var speed = 200.0
 var distance = 0.0
 
@@ -33,17 +44,24 @@ var noise := OpenSimplexNoise.new()
 
 var tutorial_state = TutorialState.INACTIVE
 
+var last_action := ""
+
 enum TutorialState {
 	INACTIVE,
 	START,
 	JUMP,
 	SHIP,
 	ACTIONS,
+	CONGRATULATIONS,
+	FINISHED
 }
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	
+	if OS.has_feature("debug"):
+		debug.show()
 	
 	MusicEngine.play_song("Water")
 	
@@ -60,6 +78,8 @@ func _process(delta: float) -> void:
 	
 	process_actions()
 	process_state()
+	score += 10
+	score_label.text = str(score)
 
 
 func _unhandled_key_input(event: InputEventKey) -> void:
@@ -103,17 +123,30 @@ func process_state() -> void:
 				$ShipSpawnTimer.start()
 				tutorial_text.bbcode_text = "[u]Free fishes[/u] by [u]hitting ships[/u] from above or below.\n The harder the better! Free [u]10[/u] Fish!"
 		TutorialState.SHIP:
-			if $Followers.get_child_count() > 10:
+			if $Followers.get_child_count() >= 10:
 				SoundEngine.play_sound("TutorialSuccess")
+				tutorial_text.bbcode_text = "Freed fishes can help you fight! Press %s or the button top left to unleash a 'Fish Rain'!" % str(Keymap.input_to_text(Keymap.input_for_action("swarm_action_1")))
 				tutorial_state = TutorialState.ACTIONS
+				
+		TutorialState.ACTIONS:
+			if last_action != "":
+				SoundEngine.play_sound("TutorialSuccess")
+				tutorial_text.bbcode_text = "Nice! %s\nNow go and free as many fish as you can!" % last_action
+				tutorial_state = TutorialState.FINISHED
+				yield(get_tree().create_timer(5), "timeout")
+				tutorial.hide()
+			
 
 
 func process_actions() -> void:
 	var swarm = get_tree().get_nodes_in_group("available_fish")
+	swarm_count.text = str(swarm.size())
 	
-	if Input.is_action_just_pressed("swarm_action_1") and swarm.size() >= 10:
-		for i in range(10):
-			swarm[i].fish_rain()
+	fish_rain.disabled = swarm.size() < 10
+	swarm_tornado.disabled = swarm.size() < 20
+	awake_the_kraken.disabled = swarm.size() < 50
+
+
 
 func update_water(offset: float = 0.0) -> void:
 	if water == null:
@@ -206,3 +239,21 @@ func _on_Keymap_pressed() -> void:
 
 func _on_Start_pressed() -> void:
 	start()
+
+
+func _on_FishRain_pressed() -> void:
+	last_action = "You summoned a 'Fish Rain'!"
+	var swarm = get_tree().get_nodes_in_group("available_fish")
+	
+	for i in range(10):
+			swarm[i].fish_rain()
+
+
+func _on_SwarmTornado_pressed() -> void:
+	
+	last_action = "You summoned a 'Swarm Tornado'!"
+
+
+func _on_AwakeTheKraken_pressed() -> void:
+	
+	last_action = "You awoke the Kraken!"
