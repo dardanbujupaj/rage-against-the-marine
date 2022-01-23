@@ -46,10 +46,10 @@ const sounds = {
 		"stream": preload("res://audio/effects/MUSIC_EFFECT_Bell_Voice_Positive_07_stereo.wav"),
 		"volume": 0
 		},
-#	"Jupiter": {
-#		"stream": preload("res://Sounds/Jupiter1.wav"),
-#		"volume": 0
-#		},
+	"Kraken": {
+		"stream": preload("res://audio/effects/MONSTER_Growl_Deep_02_Long_mono.wav"),
+		"volume": 10
+		},
 #	"Whoosh": {
 #		"stream": preload("res://Sounds/woosh.wav"),
 #		"volume": 20

@@ -272,13 +272,16 @@ func _on_AwakeTheKraken_pressed() -> void:
 	if state_machine.get_current_node() == "RESET":
 		last_action = "You awoke the Kraken!"
 		
+		SoundEngine.play_sound("Kraken")
 		state_machine.travel("awaken")
 
 
 
 func kraken_attack() -> void:
 	var tween = $KrakenTween
-	print("attack")
+	
+	SoundEngine.play_sound("Kraken")
+	
 	for ship in get_tree().get_nodes_in_group("ships"):
 		print("attack" + str(ship))
 		var kraken_arm = preload("res://KrakenArm.tscn").instance()
