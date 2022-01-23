@@ -31,9 +31,8 @@ onready var swarm_cam_tween := $Tween
 onready var swarm_container := $CanvasLayer/SwarmContainer
 onready var swarm_count = $CanvasLayer/SwarmContainer/VBoxContainer/Swarm/Swarm
 onready var swarm_actions = $CanvasLayer/SwarmContainer/VBoxContainer/Actions
-onready var fish_rain = $CanvasLayer/SwarmContainer/VBoxContainer/Actions/FishRain
-onready var swarm_tornado = $CanvasLayer/SwarmContainer/VBoxContainer/Actions/SwarmTornado
-onready var awake_the_kraken = $CanvasLayer/SwarmContainer/VBoxContainer/Actions/AwakeTheKraken
+onready var fish_rain = $CanvasLayer/SwarmContainer/VBoxContainer/Actions/VBoxContainer/FishRain
+onready var awake_the_kraken = $CanvasLayer/SwarmContainer/VBoxContainer/Actions/VBoxContainer3/AwakeTheKraken
 
 
 var score := 0
@@ -156,7 +155,6 @@ func process_actions() -> void:
 	swarm_count.text = str(swarm.size())
 	
 	fish_rain.disabled = swarm.size() < 10
-	swarm_tornado.disabled = swarm.size() < 20
 	awake_the_kraken.disabled = swarm.size() < 50
 
 
@@ -274,6 +272,11 @@ func _on_AwakeTheKraken_pressed() -> void:
 		
 		SoundEngine.play_sound("Kraken")
 		state_machine.travel("awaken")
+		
+		var swarm = get_tree().get_nodes_in_group("available_fish")
+	
+		for i in range(50):
+				swarm[i].kraken()
 
 
 
