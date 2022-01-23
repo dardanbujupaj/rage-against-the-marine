@@ -37,12 +37,14 @@ func _physics_process(delta: float) -> void:
 	# dive into water
 	if not last_in_water and is_in_water():
 		SoundEngine.play_sound("CharacterSplash", velocity.y / MAX_VELOCITY_Y)
-		AudioServer.set_bus_effect_enabled(AudioServer.get_bus_index("Master"), 0, true)
+		AudioServer.set_bus_effect_enabled(AudioServer.get_bus_index("Music"), 0, true)
 	# jump out of water
 	if last_in_water and not is_in_water():
-		AudioServer.set_bus_effect_enabled(AudioServer.get_bus_index("Master"), 0, false)
+		AudioServer.set_bus_effect_enabled(AudioServer.get_bus_index("Music"), 0, false)
 	
 	last_in_water = is_in_water()
+	
+	
 	
 	if is_in_water():
 		if Input.is_action_pressed("jump"):

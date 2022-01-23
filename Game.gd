@@ -58,6 +58,7 @@ func _process(delta: float) -> void:
 	update_water(distance)
 	update_labels()
 	
+	process_actions()
 	process_state()
 
 
@@ -106,6 +107,13 @@ func process_state() -> void:
 				SoundEngine.play_sound("TutorialSuccess")
 				tutorial_state = TutorialState.ACTIONS
 
+
+func process_actions() -> void:
+	var swarm = get_tree().get_nodes_in_group("available_fish")
+	
+	if Input.is_action_just_pressed("swarm_action_1") and swarm.size() >= 10:
+		for i in range(10):
+			swarm[i].fish_rain()
 
 func update_water(offset: float = 0.0) -> void:
 	if water == null:

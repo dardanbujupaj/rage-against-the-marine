@@ -16,23 +16,23 @@ const sounds = {
 	
 	"SmallSplash1": {
 		"stream": preload("res://audio/effects/SPLASH_Small_01_mono.wav"),
-		"volume": 0
+		"volume": 10
 		},
 	"SmallSplash2": {
 		"stream": preload("res://audio/effects/SPLASH_Small_02_mono.wav"),
-		"volume": 0
+		"volume": 10
 		},
 	"SmallSplash3": {
 		"stream": preload("res://audio/effects/SPLASH_Small_03_mono.wav"),
-		"volume": 0
+		"volume": 10
 		},
 	"SmallSplash4": {
 		"stream": preload("res://audio/effects/SPLASH_Small_04_mono.wav"),
-		"volume": 0
+		"volume": 10
 		},
 	"SmallSplash5": {
 		"stream": preload("res://audio/effects/SPLASH_Small_05_mono.wav"),
-		"volume": 0
+		"volume": 10
 		},
 	"CharacterSplash": {
 		"stream": preload("res://audio/effects/SPLASH_Ground_01_mono.wav"),
