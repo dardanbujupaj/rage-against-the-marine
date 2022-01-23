@@ -24,4 +24,4 @@ await $`${godotCommand} --no-window --export ${target}`
 await $`ls -lah build`
 
 const releaseFiles = await globby('./build/*');
-await $`7z a -sdel release/rage-agains-the-marine--${target}.zip ${releaseFiles}`
+await $`7z a -sdel release/rage-agains-the-marine-${target}.zip ${releaseFiles}`
