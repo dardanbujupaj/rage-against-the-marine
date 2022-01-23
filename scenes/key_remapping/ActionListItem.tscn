@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/key_remapping/ActionListItem.gd" type="Script" id=1]
+
+[node name="ActionListItem" type="HBoxContainer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -512.0
+margin_top = -300.0
+margin_right = -496.0
+margin_bottom = -280.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ActionLabel" type="Label" parent="."]
+margin_top = 3.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+
+[node name="Event" type="Button" parent="."]
+margin_left = 4.0
+margin_right = 16.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="mouse_entered" from="Event" to="." method="_on_Event_mouse_entered"]
+[connection signal="pressed" from="Event" to="." method="_on_Event_pressed"]

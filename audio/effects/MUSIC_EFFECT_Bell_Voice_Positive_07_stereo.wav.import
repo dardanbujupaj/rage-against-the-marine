@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/MUSIC_EFFECT_Bell_Voice_Positive_07_stereo.wav-4c6cc1af4d4229b7d3f737818852631e.sample"
+
+[deps]
+
+source_file="res://audio/effects/MUSIC_EFFECT_Bell_Voice_Positive_07_stereo.wav"
+dest_files=[ "res://.import/MUSIC_EFFECT_Bell_Voice_Positive_07_stereo.wav-4c6cc1af4d4229b7d3f737818852631e.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

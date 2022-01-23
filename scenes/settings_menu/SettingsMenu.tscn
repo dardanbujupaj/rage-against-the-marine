@@ -1,0 +1,191 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/settings_menu/SettingsMenu.gd" type="Script" id=1]
+[ext_resource path="res://default_theme.tres" type="Theme" id=2]
+
+[node name="SettingsMenu" type="PopupPanel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -183.0
+margin_top = -188.0
+margin_right = 183.0
+margin_bottom = 188.0
+theme = ExtResource( 2 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 366.0
+margin_bottom = 376.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 366.0
+margin_bottom = 32.0
+
+[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_right = 93.0
+margin_bottom = 32.0
+text = "Settings"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 40.0
+margin_right = 366.0
+margin_bottom = 44.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 52.0
+margin_right = 366.0
+margin_bottom = 84.0
+
+[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer2"]
+margin_right = 60.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+text = "Font"
+
+[node name="Font" type="OptionButton" parent="VBoxContainer/HBoxContainer2"]
+margin_left = 68.0
+margin_right = 366.0
+margin_bottom = 32.0
+text = "ChelseaMarket-Regular"
+items = [ "ChelseaMarket-Regular", null, false, 0, null, "Roboto-Regular", null, false, 1, null, "Roboto-Bold", null, false, 2, null ]
+selected = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator3" type="HSeparator" parent="VBoxContainer"]
+margin_top = 132.0
+margin_right = 366.0
+margin_bottom = 136.0
+
+[node name="Audio" type="Label" parent="VBoxContainer"]
+margin_top = 92.0
+margin_right = 366.0
+margin_bottom = 124.0
+text = "Audio"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MainVolume" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 132.0
+margin_right = 366.0
+margin_bottom = 164.0
+
+[node name="MainVolume" type="Label" parent="VBoxContainer/MainVolume"]
+margin_right = 258.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+text = "Main"
+
+[node name="Main" type="HSlider" parent="VBoxContainer/MainVolume"]
+margin_left = 266.0
+margin_right = 366.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 100, 0 )
+max_value = 1.0
+step = 0.05
+
+[node name="MusicVolume" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 172.0
+margin_right = 366.0
+margin_bottom = 204.0
+
+[node name="Label" type="Label" parent="VBoxContainer/MusicVolume"]
+margin_right = 258.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+text = "Music"
+
+[node name="Music" type="HSlider" parent="VBoxContainer/MusicVolume"]
+margin_left = 266.0
+margin_right = 366.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 100, 0 )
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="SoundVolume" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 212.0
+margin_right = 366.0
+margin_bottom = 244.0
+
+[node name="Label" type="Label" parent="VBoxContainer/SoundVolume"]
+margin_right = 258.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+text = "Sound"
+
+[node name="Sound" type="HSlider" parent="VBoxContainer/SoundVolume"]
+margin_left = 266.0
+margin_right = 366.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 100, 0 )
+max_value = 1.0
+step = 0.05
+value = 0.3
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+margin_top = 252.0
+margin_right = 366.0
+margin_bottom = 256.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Gameplay" type="Label" parent="VBoxContainer"]
+margin_top = 264.0
+margin_right = 366.0
+margin_bottom = 296.0
+text = "Gameplay"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Screenshake" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 304.0
+margin_right = 366.0
+margin_bottom = 336.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBoxContainer/Screenshake"]
+margin_right = 258.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+text = "Screenshake intensity"
+
+[node name="Screenshake" type="HSlider" parent="VBoxContainer/Screenshake"]
+margin_left = 266.0
+margin_right = 366.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 100, 0 )
+max_value = 1.0
+step = 0.05
+
+[node name="Close" type="Button" parent="VBoxContainer"]
+margin_top = 344.0
+margin_right = 366.0
+margin_bottom = 376.0
+text = "Close"
+
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer2/Font" to="." method="_on_Font_item_selected"]
+[connection signal="value_changed" from="VBoxContainer/MainVolume/Main" to="." method="_on_Main_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/MusicVolume/Music" to="." method="_on_Music_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/SoundVolume/Sound" to="." method="_on_Sound_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/Screenshake/Screenshake" to="." method="_on_Screenshake_value_changed"]
+[connection signal="mouse_entered" from="VBoxContainer/Close" to="." method="_on_Button_mouse_entered"]
+[connection signal="pressed" from="VBoxContainer/Close" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Close" to="." method="_on_Close_pressed"]

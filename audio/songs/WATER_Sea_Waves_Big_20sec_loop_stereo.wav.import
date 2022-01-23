@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/WATER_Sea_Waves_Big_20sec_loop_stereo.wav-1808825afe70571f644faf643b465e3d.sample"
+
+[deps]
+
+source_file="res://audio/songs/WATER_Sea_Waves_Big_20sec_loop_stereo.wav"
+dest_files=[ "res://.import/WATER_Sea_Waves_Big_20sec_loop_stereo.wav-1808825afe70571f644faf643b465e3d.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=true
+compress/mode=0

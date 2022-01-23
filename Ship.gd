@@ -34,6 +34,7 @@ func _on_Ship_body_entered(body: Node) -> void:
 	add_child(explosion)
 	
 	get_tree().call_group("shake_cameras", "add_trauma", impact)
+	SoundEngine.play_sound("Explosion", impact)
 	
 	explosion.global_position = body.global_position
 	emit_signal("fish_freed", position, int(impact * 5))

@@ -13,8 +13,10 @@ onready var distance_label := $CanvasLayer/VBoxContainer/Distance
 onready var speed_label := $CanvasLayer/Debug/Speed
 onready var fish_speed := $CanvasLayer/Debug/FishSpeed
 
-onready var tutorial_panel := $Menu/Tutorial
-onready var tutorial_text := $Menu/Tutorial/TutorialText
+onready var tutorial := $Tutorial/Tutorial
+onready var tutorial_text := $Tutorial/Tutorial/TutorialPanel/TutorialText
+onready var tutorial_jump_arrow := $Tutorial/JumpArrow
+onready var tutorial_action_highlight := $Tutorial/ActionHighlight
 
 onready var camera_position := $CameraPosition
 onready var camera := $CameraPosition/Camera
@@ -42,6 +44,8 @@ enum TutorialState {
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	
+	MusicEngine.play_song("Water")
 	
 	noise.period = 300.0
 	update_water()
@@ -73,6 +77,7 @@ func start() -> void:
 	get_tree().paused = false
 	tutorial_state = TutorialState.START
 	
+	
 	# hide all menus
 	for menu in $Menu.get_children():
 		menu.hide()
@@ -87,18 +92,19 @@ func start() -> void:
 func process_state() -> void:
 	match tutorial_state:
 		TutorialState.START:
-			tutorial_panel.show()
+			tutorial.show()
 			tutorial_state = TutorialState.JUMP
-			tutorial_text.bbcode_text = "Press [u]%s[/u] to jump.\nThe longer you press the higher the jump!" % str(Keymap.input_to_text(Keymap.input_for_action("jump")))
+			tutorial_text.bbcode_text = "Press and hold [u]%s[/u] to jump.\nJump higher!" % str(Keymap.input_to_text(Keymap.input_for_action("jump")))
 		TutorialState.JUMP:
 			if character.position.y < 0:
 				tutorial_state = TutorialState.SHIP
+				SoundEngine.play_sound("TutorialSuccess")
 				$ShipSpawnTimer.start()
-				tutorial_text.bbcode_text = "[u]Free fishes[/u] by [u]hitting ships[/u] from above or below.\n The faster the better!"
+				tutorial_text.bbcode_text = "[u]Free fishes[/u] by [u]hitting ships[/u] from above or below.\n The harder the better! Free [u]10[/u] Fish!"
 		TutorialState.SHIP:
 			if $Followers.get_child_count() > 10:
+				SoundEngine.play_sound("TutorialSuccess")
 				tutorial_state = TutorialState.ACTIONS
-				tutorial_text.bbcode_text = "Freed fishes can help you attack ships.\nPress [u]%s[/u] oder the [u]button top left[/u] to use 'Fish Rain'" % str(Keymap.input_to_text(Keymap.input_for_action("swarm_action_1")))
 
 
 func update_water(offset: float = 0.0) -> void:

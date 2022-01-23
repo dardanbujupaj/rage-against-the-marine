@@ -263,21 +263,36 @@ margin_bottom = 102.0
 
 [node name="SettingsMenu" parent="Menu" instance=ExtResource( 6 )]
 
-[node name="Tutorial" type="PanelContainer" parent="Menu"]
+[node name="Tutorial" type="CanvasLayer" parent="."]
+
+[node name="Tutorial" type="MarginContainer" parent="Tutorial"]
 visible = false
 anchor_left = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-margin_left = -7.0
-margin_right = 7.0
-margin_bottom = 14.0
+anchor_bottom = 1.0
+margin_left = -310.0
+margin_top = -83.0
+margin_right = 310.0
+margin_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+custom_constants/margin_bottom = 50
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TutorialPanel" type="PanelContainer" parent="Tutorial/Tutorial"]
+margin_right = 620.0
+margin_bottom = 3.0
 grow_horizontal = 2
 theme = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TutorialText" type="RichTextLabel" parent="Menu/Tutorial"]
-margin_right = 600.0
+[node name="TutorialText" type="RichTextLabel" parent="Tutorial/Tutorial/TutorialPanel"]
+margin_right = 620.0
 margin_bottom = 33.0
 rect_min_size = Vector2( 600, 0 )
 bbcode_enabled = true
@@ -290,8 +305,8 @@ scroll_active = false
 [connection signal="pressed" from="Menu/Menu/Start" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="Menu/Menu/Start" to="." method="_on_Start_pressed"]
 [connection signal="mouse_entered" from="Menu/Menu/Keymap" to="." method="_on_Button_mouse_entered"]
-[connection signal="pressed" from="Menu/Menu/Keymap" to="." method="_on_Keymap_pressed"]
 [connection signal="pressed" from="Menu/Menu/Keymap" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Menu/Menu/Keymap" to="." method="_on_Keymap_pressed"]
 [connection signal="mouse_entered" from="Menu/Menu/Settings" to="." method="_on_Button_mouse_entered"]
-[connection signal="pressed" from="Menu/Menu/Settings" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="Menu/Menu/Settings" to="." method="_on_Settings_pressed"]
+[connection signal="pressed" from="Menu/Menu/Settings" to="." method="_on_Button_pressed"]

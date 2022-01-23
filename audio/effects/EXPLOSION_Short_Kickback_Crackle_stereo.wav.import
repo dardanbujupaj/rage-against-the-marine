@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/EXPLOSION_Short_Kickback_Crackle_stereo.wav-fa0c2f8d026ea2f7618e39219ecef602.sample"
+
+[deps]
+
+source_file="res://audio/effects/EXPLOSION_Short_Kickback_Crackle_stereo.wav"
+dest_files=[ "res://.import/EXPLOSION_Short_Kickback_Crackle_stereo.wav-fa0c2f8d026ea2f7618e39219ecef602.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
