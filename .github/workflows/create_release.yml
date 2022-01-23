@@ -1,0 +1,98 @@
+on: 
+  workflow_dispatch
+
+env:
+  GODOT_VERSION: 3.5.1-rc1
+
+jobs:
+  DefineVersion:
+    runs-on: ubuntu-latest
+    name: Define Version
+    outputs:
+      VERSION: ${{ steps.version.outputs.version }}
+
+    steps:
+    - id: version
+      name: Version from Date and Build-nr
+      run: echo "::set-output name=version::$(date +%Y%m%d).$GITHUB_RUN_NUMBER"
+
+
+  # job id, can be anything
+  CreateReleaseExports:
+    needs: DefineVersion
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    # Always use ubuntu-latest for this action
+    runs-on: ${{matrix.os}}
+
+    # Job name, can be anything
+    name: Export Game
+    steps:
+      # Always include the checkout step so that 
+      # your project is available for Godot to export
+    - name: checkout
+      uses: actions/checkout@v2
+      # Ensure that you get the entire project history
+      with:
+        fetch-depth: 0
+      # separate step to extract the version from the tag name
+    - name: setup zx
+      run: npm install -g zx
+
+    - name: Cache godot binaries and templates
+      id: cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ./bin
+          /home/runner/.local/share/godot/templates
+          /Users/runner/Library/Application Support/Godot/templates
+        key: godot-${{ env.GODOT_VERSION }}-${{ runner.os }}
+
+    - name: Install Godot + Templates
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: zx ./scripts/download-godot.mjs ${{env.GODOT_VERSION}}
+
+    - name: Build game
+      run: zx ./scripts/build-release.mjs ${{needs.DefineVersion.outputs.VERSION}}
+    
+
+    - name: Build html export
+      if: ${{ matrix.os == 'ubuntu-latest' }}
+      run: zx ./scripts/build-release.mjs ${{needs.DefineVersion.outputs.VERSION}} html
+
+
+      # Build windows export on linux, because windows is dumb
+    - name: Build windows export
+      if: ${{ matrix.os == 'ubuntu-latest' }}
+      run: zx ./scripts/build-release.mjs ${{needs.DefineVersion.outputs.VERSION}} windows
+    - uses: actions/upload-artifact@v2
+      with:
+        name: release
+        path: ./release/*.zip
+
+  FinishRelease:
+    needs: [DefineVersion, CreateReleaseExports]
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+      # Ensure that you get the entire project history
+      with:
+        fetch-depth: 0
+      # separate step to extract the version from the tag name
+    - uses: actions/download-artifact@v2
+      id: download
+      with:
+        name: release
+        path: ./release/
+    - run: ls ./release -lah
+    - id: create-release
+      run: |
+        gh release create $VERSION --target $TARGET --notes "$VERSION" --title "$VERSION" release/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        VERSION: ${{needs.DefineVersion.outputs.VERSION}}
+        TARGET: ${{ github.sha }}

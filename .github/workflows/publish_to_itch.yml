@@ -1,0 +1,43 @@
+on:
+  release:
+    types: [published]
+    
+env:
+  GAME_TITLE: rage-against-the-marine
+  ITCH_USER: dardanbujupaj
+  PACKAGE_PREFIX: rage-against-the-marine
+
+jobs:
+  publish_to_itch:
+    strategy:
+      matrix:
+        target: [html, windows, macos, linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          file: ${{ env.PACKAGE_PREFIX }}-${{matrix.target}}.zip
+          token: ${{ secrets.GH_TOKEN }}
+      - name: setup butler
+        id: setup-butler
+        run: |
+          curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
+          unzip butler.zip
+          # GNU unzip tends to not set the executable bit even though it's set in the .zip
+          chmod +x butler
+          # just a sanity check run (and also helpful in case you're sharing CI logs)
+          ./butler -V
+      - name: deploy to itch.io (Windows)
+        id: deploy
+        run: |
+          ls -lah
+          echo ${GITHUB_REF##*/}
+          ./butler push "${PACKAGE}" "${ITCH_USER}/${ITCH_GAME}:${CHANNEL}" --userversion ${GITHUB_REF##*/}
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: ${{ matrix.TARGET }}
+          ITCH_GAME: ${{ env.GAME_TITLE }}
+          ITCH_USER: ${{ env.ITCH_USER }}
+          PACKAGE: ${{ env.PACKAGE_PREFIX }}-${{ matrix.target}}.zip
+          VERSION: ${{ steps.download-windows.outputs.version }}
+      
