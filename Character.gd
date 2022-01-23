@@ -33,7 +33,7 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	
 	if is_in_water():
-		if Input.is_action_pressed("up"):
+		if Input.is_action_pressed("jump"):
 			velocity.y -= JUMP_BOUYANCY * delta
 		else:
 			if velocity.y > 0:
@@ -41,7 +41,7 @@ func _physics_process(delta: float) -> void:
 			else:
 				velocity.y -= IDLE_BOUYANCY * delta
 	else:
-		if Input.is_action_pressed("up"):
+		if Input.is_action_pressed("jump"):
 			velocity.y += JUMP_GRAVITY * delta
 		else:
 			if velocity.y < 0:

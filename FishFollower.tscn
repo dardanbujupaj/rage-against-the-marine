@@ -33,5 +33,5 @@ script = ExtResource( 2 )
 [node name="Superfish2" type="AnimatedSprite" parent="."]
 scale = Vector2( 0.2, 0.2 )
 frames = SubResource( 5 )
-frame = 1
+frame = 2
 playing = true

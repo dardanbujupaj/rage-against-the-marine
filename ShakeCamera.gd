@@ -1,7 +1,7 @@
 extends Camera2D
 
-export var max_offset : float = 50.0
-export var max_roll : float = 50.0
+export var max_offset : float = 200.0
+export var max_roll : float = 100.0
 export var trauma_reduction : float = 2
 
 var base_seed: int = 0
@@ -33,7 +33,7 @@ func _process(_delta):
 	
 func _process_shake(center, angle, delta) -> void:
 	if trauma > 0:
-		var shake = pow(trauma, 2)
+		var shake = pow(trauma, 2) * Settings.screenshake_intensity
 		var rotation_offset = angle + (max_roll * shake *  _get_noise(base_seed, OS.get_ticks_msec()))
 		
 		

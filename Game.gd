@@ -1,15 +1,20 @@
-tool
 extends Node2D
 
-const SEGMENTS = 48
+const SEGMENTS := 48
+const WATER_HEIGHT := 300.0
+const WATER_OFFSET := 300.0 # to make sure water fills camera area
 
 onready var water := $Water
+onready var character := $Character
 
 
 
 onready var distance_label := $CanvasLayer/VBoxContainer/Distance
 onready var speed_label := $CanvasLayer/Debug/Speed
 onready var fish_speed := $CanvasLayer/Debug/FishSpeed
+
+onready var tutorial_panel := $Menu/Tutorial
+onready var tutorial_text := $Menu/Tutorial/TutorialText
 
 onready var camera_position := $CameraPosition
 onready var camera := $CameraPosition/Camera
@@ -18,7 +23,21 @@ onready var swarm_cam_tween := $Tween
 var speed = 200.0
 var distance = 0.0
 
+var speed_increase = 20
+
+var swarm_cam = true
+
 var noise := OpenSimplexNoise.new()
+
+var tutorial_state = TutorialState.INACTIVE
+
+enum TutorialState {
+	INACTIVE,
+	START,
+	JUMP,
+	SHIP,
+	ACTIONS,
+}
 
 
 # Called when the node enters the scene tree for the first time.
@@ -27,22 +46,59 @@ func _ready() -> void:
 	noise.period = 300.0
 	update_water()
 	update_speed()
+	get_tree().paused = true
 
 
 func _process(delta: float) -> void:
 	distance += delta * speed
 	update_water(distance)
-	
 	update_labels()
+	
+	process_state()
 
 
 func _unhandled_key_input(event: InputEventKey) -> void:
-	if event.is_pressed() and event.scancode == KEY_F:
-		spawn_follower(Vector2())
-	if event.is_pressed() and event.scancode == KEY_S:
+	if OS.has_feature("debug"):
+		if event.is_pressed() and event.scancode == KEY_F:
+			spawn_follower(Vector2())
+		if event.is_pressed() and event.scancode == KEY_K:
+			$AnimationPlayer.play("awaken")
+		
+	if event.is_action("toggle_swarm_cam") and event.is_pressed():
 		toggle_swarm_cam()
-	if event.is_pressed() and event.scancode == KEY_K:
-		$AnimationPlayer.play("awaken")
+	
+
+
+func start() -> void:
+	get_tree().paused = false
+	tutorial_state = TutorialState.START
+	
+	# hide all menus
+	for menu in $Menu.get_children():
+		menu.hide()
+	
+	# remove all fishes
+	for fish in $Followers.get_children():
+		fish.free()
+	
+	toggle_swarm_cam()
+
+
+func process_state() -> void:
+	match tutorial_state:
+		TutorialState.START:
+			tutorial_panel.show()
+			tutorial_state = TutorialState.JUMP
+			tutorial_text.bbcode_text = "Press [u]%s[/u] to jump.\nThe longer you press the higher the jump!" % str(Keymap.input_to_text(Keymap.input_for_action("jump")))
+		TutorialState.JUMP:
+			if character.position.y < 0:
+				tutorial_state = TutorialState.SHIP
+				$ShipSpawnTimer.start()
+				tutorial_text.bbcode_text = "[u]Free fishes[/u] by [u]hitting ships[/u] from above or below.\n The faster the better!"
+		TutorialState.SHIP:
+			if $Followers.get_child_count() > 10:
+				tutorial_state = TutorialState.ACTIONS
+				tutorial_text.bbcode_text = "Freed fishes can help you attack ships.\nPress [u]%s[/u] oder the [u]button top left[/u] to use 'Fish Rain'" % str(Keymap.input_to_text(Keymap.input_for_action("swarm_action_1")))
 
 
 func update_water(offset: float = 0.0) -> void:
@@ -53,16 +109,20 @@ func update_water(offset: float = 0.0) -> void:
 	var poly := []
 	for i in range(SEGMENTS + 1):
 		var x = float(i) / SEGMENTS * viewport_rect.size.x
-		var y = 300.0 + noise.get_noise_1d(x + offset) * 20.0
+		var y = WATER_HEIGHT + noise.get_noise_1d(x + offset) * 20.0
 		poly.append(Vector2(x, y))
 	
-	poly.append_array([viewport_rect.end, Vector2(0, viewport_rect.size.y)])
+	poly.append_array([
+		Vector2(viewport_rect.end.x + WATER_OFFSET, WATER_HEIGHT),
+		viewport_rect.end + Vector2(WATER_OFFSET, WATER_OFFSET),
+		Vector2(-WATER_OFFSET, viewport_rect.size.y),
+		Vector2(-WATER_OFFSET, WATER_HEIGHT)
+		])
 	
 	water.polygon = poly
 	water.texture_offset.x = offset
 
 
-var speed_increase = 20
 
 func update_speed() -> void:
 	speed += speed_increase
@@ -101,8 +161,6 @@ func _on_Ship_fish_freed(pos: Vector2, amount: int) -> void:
 		spawn_follower(pos)
 
 
-var swarm_cam = false
-
 func toggle_swarm_cam() -> void:
 	swarm_cam = !swarm_cam
 	var target = $Followers.position if swarm_cam else Vector2(512, 300)
@@ -114,3 +172,23 @@ func toggle_swarm_cam() -> void:
 	swarm_cam_tween.start()
 	
 
+
+
+func _on_Button_pressed() -> void:
+	SoundEngine.play_sound("UIClick")
+
+
+func _on_Button_mouse_entered() -> void:
+	SoundEngine.play_sound("UIHover")
+
+
+func _on_Settings_pressed() -> void:
+	$Menu/SettingsMenu.popup_centered()
+
+
+func _on_Keymap_pressed() -> void:
+	$Menu/KeyRemapping.popup_centered()
+
+
+func _on_Start_pressed() -> void:
+	start()
