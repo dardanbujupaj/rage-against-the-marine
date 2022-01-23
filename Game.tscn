@@ -349,7 +349,7 @@ position = Vector2( -1120, -19 )
 position = Vector2( -547, -69 )
 
 [node name="SpeedTimer" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 10.0
 
 [node name="ShipSpawnTimer" type="Timer" parent="."]
 wait_time = 5.0
@@ -609,6 +609,38 @@ margin_right = 80.0
 margin_bottom = 102.0
 
 [node name="SettingsMenu" parent="Menu" instance=ExtResource( 6 )]
+
+[node name="FinalScore" type="PanelContainer" parent="Menu"]
+visible = false
+margin_left = 100.0
+margin_top = 141.0
+margin_right = 384.0
+margin_bottom = 208.0
+theme = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu/FinalScore"]
+margin_right = 284.0
+margin_bottom = 107.0
+
+[node name="Label" type="Label" parent="Menu/FinalScore/VBoxContainer"]
+margin_right = 284.0
+margin_bottom = 67.0
+text = "Ouch...
+You got caught...
+Did you forget to jump?"
+
+[node name="HSeparator" type="HSeparator" parent="Menu/FinalScore/VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 4.0
+
+[node name="Score" type="Label" parent="Menu/FinalScore/VBoxContainer"]
+margin_top = 75.0
+margin_right = 284.0
+margin_bottom = 107.0
+text = "Score: 0"
 
 [node name="Tutorial" type="CanvasLayer" parent="."]
 

@@ -1,6 +1,7 @@
 extends Area2D
 
-signal fish_freed(position, amount) 
+signal fish_freed(position, amount)
+signal fish_caught
 
 var speed = 0.0
 
@@ -28,8 +29,13 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_Ship_body_entered(body: Node) -> void:
+	if body is KinematicBody2D:
+		print(abs(body.velocity.y))
+	if body is KinematicBody2D and abs(body.velocity.y) < 150:
+		emit_signal("fish_caught")
+		return
 	
-	var impact = (abs(body.velocity.y) / body.MAX_VELOCITY_Y) if body is RigidBody2D else 1.0
+	var impact = (abs(body.velocity.y) / body.MAX_VELOCITY_Y) if body is KinematicBody2D else 1.0
 	var explosion = preload("res://Explosion.tscn").instance()
 	explosion.scale *= impact * 2
 	add_child(explosion)

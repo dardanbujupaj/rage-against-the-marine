@@ -82,7 +82,7 @@ func _process(delta: float) -> void:
 	
 	process_actions()
 	process_state()
-	score += 10
+	
 	score_label.text = str(score)
 
 
@@ -92,16 +92,20 @@ func _unhandled_key_input(event: InputEventKey) -> void:
 			spawn_follower(Vector2())
 		if event.is_pressed() and event.scancode == KEY_K:
 			$AnimationPlayer.play("awaken")
-		
-	if event.is_action("toggle_swarm_cam") and event.is_pressed():
-		toggle_swarm_cam()
+		if event.is_action("toggle_swarm_cam") and event.is_pressed():
+			toggle_swarm_cam()
 	
 
 
 func start() -> void:
 	get_tree().paused = false
+	score = 0
 	tutorial_state = TutorialState.START
-	
+	speed = 200.0
+	distance = 0.0
+	speed_increase = 20
+	character.position = Vector2(228, 204)
+	character.velocity = Vector2()
 	
 	# hide all menus
 	for menu in $Menu.get_children():
@@ -110,6 +114,10 @@ func start() -> void:
 	# remove all fishes
 	for fish in $Followers.get_children():
 		fish.free()
+	
+	# remove all fishes
+	for ship in get_tree().get_nodes_in_group("ships"):
+		ship.free()
 	
 	toggle_swarm_cam()
 
@@ -140,9 +148,9 @@ func process_state() -> void:
 				SoundEngine.play_sound("TutorialSuccess")
 				tutorial_text.bbcode_text = "Nice! %s\nNow go and free as many fish as you can!" % last_action
 				tutorial_state = TutorialState.FINISHED
+				$SpeedTimer.start()
 				
 				
-				score = 0
 				score_container.show()
 				
 				yield(get_tree().create_timer(5), "timeout")
@@ -205,6 +213,7 @@ func _on_ShipSpawnTimer_timeout() -> void:
 	ship.position.y = 300.0
 	ship.position.x = get_viewport().size.x * 1.5
 	ship.connect("fish_freed", self, "_on_Ship_fish_freed")
+	ship.connect("fish_caught", self, "_on_Ship_fish_caught")
 	call_deferred("add_child", ship)
 
 
@@ -215,8 +224,22 @@ func spawn_follower(position: Vector2) -> void:
 
 
 func _on_Ship_fish_freed(pos: Vector2, amount: int) -> void:
+	score += amount
 	for _i in range(amount):
 		spawn_follower(pos)
+
+func _on_Ship_fish_caught() -> void:
+	game_over()
+	
+	
+func game_over() -> void:
+	get_tree().paused = true
+	toggle_swarm_cam()
+	swarm_container.hide()
+	score_container.hide()
+	$Menu/Menu.show()
+	$Menu/FinalScore.show()
+	$Menu/FinalScore/VBoxContainer/Score.text = "Score: %d" % score
 
 
 func toggle_swarm_cam() -> void:
