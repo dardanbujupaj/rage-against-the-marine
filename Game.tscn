@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Character.tscn" type="PackedScene" id=2]
@@ -9,11 +9,44 @@
 [ext_resource path="res://FishFollower.tscn" type="PackedScene" id=7]
 [ext_resource path="res://default_theme.tres" type="Theme" id=8]
 [ext_resource path="res://scenes/actions/fish_rain_button6.png" type="Texture" id=9]
-[ext_resource path="res://scenes/actions/fish_rain_button3.png" type="Texture" id=10]
-[ext_resource path="res://scenes/actions/fish_rain_button5.png" type="Texture" id=11]
-[ext_resource path="res://scenes/actions/fish_rain_button2.png" type="Texture" id=12]
-[ext_resource path="res://scenes/actions/fish_rain_button4.png" type="Texture" id=13]
+[ext_resource path="res://scenes/actions/awake_the_kraken1.png" type="Texture" id=10]
+[ext_resource path="res://scenes/actions/awake_the_kraken3.png" type="Texture" id=11]
+[ext_resource path="res://scenes/actions/awake_the_kraken4.png" type="Texture" id=12]
+[ext_resource path="res://scenes/actions/awake_the_kraken2.png" type="Texture" id=13]
 [ext_resource path="res://scenes/actions/fish_rain_button1.png" type="Texture" id=14]
+[ext_resource path="res://Cloud.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Debug.gd" type="Script" id=16]
+[ext_resource path="res://scenes/actions/fish_rain_button7.png" type="Texture" id=17]
+[ext_resource path="res://scenes/actions/awake_the_kraken7.png" type="Texture" id=18]
+[ext_resource path="res://scenes/actions/awake_the_kraken5.png" type="Texture" id=19]
+[ext_resource path="res://scenes/actions/awake_the_kraken6.png" type="Texture" id=20]
+[ext_resource path="res://scenes/actions/fish_rain_button3.png" type="Texture" id=21]
+[ext_resource path="res://scenes/actions/fish_rain_button5.png" type="Texture" id=22]
+[ext_resource path="res://scenes/actions/fish_rain_button2.png" type="Texture" id=23]
+[ext_resource path="res://scenes/actions/fish_rain_button4.png" type="Texture" id=24]
+
+[sub_resource type="Shader" id=13]
+code = "shader_type canvas_item;
+
+void fragment() {
+	
+	
+	float intensity = texture(TEXTURE, UV).r;
+	
+	
+	COLOR = COLOR;
+	
+	COLOR *= (intensity + pow(UV.y, 5.0)) / 2.0;
+}"
+
+[sub_resource type="ShaderMaterial" id=14]
+shader = SubResource( 13 )
+
+[sub_resource type="OpenSimplexNoise" id=15]
+
+[sub_resource type="NoiseTexture" id=12]
+seamless = true
+noise = SubResource( 15 )
 
 [sub_resource type="InputEventAction" id=6]
 action = "swarm_action_1"
@@ -21,16 +54,16 @@ action = "swarm_action_1"
 [sub_resource type="ShortCut" id=7]
 shortcut = SubResource( 6 )
 
-[sub_resource type="AnimatedTexture" id=5]
+[sub_resource type="AnimatedTexture" id=17]
 frames = 5
 frame_0/texture = ExtResource( 14 )
-frame_1/texture = ExtResource( 12 )
+frame_1/texture = ExtResource( 23 )
 frame_1/delay_sec = 0.0
-frame_2/texture = ExtResource( 10 )
+frame_2/texture = ExtResource( 21 )
 frame_2/delay_sec = 0.0
-frame_3/texture = ExtResource( 13 )
+frame_3/texture = ExtResource( 24 )
 frame_3/delay_sec = 0.0
-frame_4/texture = ExtResource( 11 )
+frame_4/texture = ExtResource( 22 )
 frame_4/delay_sec = 0.0
 
 [sub_resource type="InputEventAction" id=8]
@@ -39,11 +72,29 @@ action = "swarm_action_2"
 [sub_resource type="ShortCut" id=9]
 shortcut = SubResource( 8 )
 
-[sub_resource type="InputEventAction" id=10]
-action = "swarm_action_3"
+[sub_resource type="AnimatedTexture" id=16]
+frames = 5
+frame_0/texture = ExtResource( 10 )
+frame_1/texture = ExtResource( 13 )
+frame_1/delay_sec = 0.0
+frame_2/texture = ExtResource( 11 )
+frame_2/delay_sec = 0.0
+frame_3/texture = ExtResource( 12 )
+frame_3/delay_sec = 0.0
+frame_4/texture = ExtResource( 19 )
+frame_4/delay_sec = 0.0
 
-[sub_resource type="ShortCut" id=11]
-shortcut = SubResource( 10 )
+[sub_resource type="AnimatedTexture" id=5]
+frames = 5
+frame_0/texture = ExtResource( 10 )
+frame_1/texture = ExtResource( 13 )
+frame_1/delay_sec = 0.0
+frame_2/texture = ExtResource( 11 )
+frame_2/delay_sec = 0.0
+frame_3/texture = ExtResource( 12 )
+frame_3/delay_sec = 0.0
+frame_4/texture = ExtResource( 19 )
+frame_4/delay_sec = 0.0
 
 [sub_resource type="Animation" id=1]
 length = 0.001
@@ -182,11 +233,37 @@ position = Vector2( 228, 204 )
 position = Vector2( 917, 288 )
 
 [node name="Water" type="Polygon2D" parent="."]
+material = SubResource( 14 )
 z_index = 1
-color = Color( 0.145098, 0.227451, 0.368627, 0.729412 )
+color = Color( 0.0901961, 0.12549, 0.219608, 0.733333 )
 antialiased = true
-texture_offset = Vector2( 89453.4, 0 )
+texture = SubResource( 12 )
 polygon = PoolVector2Array( 0, 296.661, 21.3333, 296.26, 42.6667, 297.098, 64, 298.706, 85.3333, 300.641, 106.667, 302.381, 128, 303.769, 149.333, 304.777, 170.667, 305.499, 192, 306.008, 213.333, 306.101, 234.667, 306.025, 256, 306.286, 277.333, 306.864, 298.667, 307.277, 320, 307.15, 341.333, 306.072, 362.667, 303.723, 384, 300.936, 405.333, 298.856, 426.667, 297.648, 448, 296.644, 469.333, 295.507, 490.667, 295.16, 512, 296.639, 533.333, 299.482, 554.667, 301.839, 576, 302.307, 597.333, 301.546, 618.667, 301.023, 640, 301.43, 661.333, 303.228, 682.667, 306.095, 704, 309.349, 725.333, 312.232, 746.667, 314.151, 768, 314.599, 789.333, 313.723, 810.667, 312.111, 832, 310.463, 853.333, 309.111, 874.667, 307.614, 896, 305.863, 917.333, 304.742, 938.667, 304.391, 960, 304.088, 981.333, 303.654, 1002.67, 303.331, 1024, 302.873, 1024, 600, 0, 600 )
+
+[node name="CloudSpawner" type="Node2D" parent="."]
+pause_mode = 2
+position = Vector2( 1195, 83 )
+
+[node name="Cloud" parent="CloudSpawner" instance=ExtResource( 15 )]
+position = Vector2( -322, 28 )
+
+[node name="Cloud2" parent="CloudSpawner" instance=ExtResource( 15 )]
+position = Vector2( -497, 16 )
+
+[node name="Cloud3" parent="CloudSpawner" instance=ExtResource( 15 )]
+position = Vector2( -720, 54 )
+
+[node name="Cloud4" parent="CloudSpawner" instance=ExtResource( 15 )]
+position = Vector2( -875, -29 )
+
+[node name="Cloud5" parent="CloudSpawner" instance=ExtResource( 15 )]
+position = Vector2( -1000, 73 )
+
+[node name="Cloud6" parent="CloudSpawner" instance=ExtResource( 15 )]
+position = Vector2( -1120, -19 )
+
+[node name="Cloud7" parent="CloudSpawner" instance=ExtResource( 15 )]
+position = Vector2( -547, -69 )
 
 [node name="SpeedTimer" type="Timer" parent="."]
 wait_time = 5.0
@@ -198,6 +275,7 @@ wait_time = 5.0
 layer = 2
 
 [node name="ScoreContainer" type="MarginContainer" parent="CanvasLayer"]
+visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -105.0
@@ -239,6 +317,7 @@ __meta__ = {
 }
 
 [node name="SwarmContainer" type="MarginContainer" parent="CanvasLayer"]
+visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 theme = ExtResource( 8 )
@@ -251,45 +330,48 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/SwarmContainer"]
 margin_left = 20.0
 margin_top = 10.0
-margin_right = 228.0
+margin_right = 156.0
 margin_bottom = 114.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/SwarmContainer/VBoxContainer"]
-margin_right = 208.0
+margin_right = 136.0
 margin_bottom = 64.0
 
 [node name="FishRain" type="TextureButton" parent="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer"]
 margin_right = 64.0
 margin_bottom = 64.0
+hint_tooltip = "Fish Rain"
 disabled = true
+shortcut_in_tooltip = false
 shortcut = SubResource( 7 )
-texture_normal = ExtResource( 14 )
-texture_hover = SubResource( 5 )
-texture_disabled = ExtResource( 9 )
+texture_normal = SubResource( 17 )
+texture_hover = ExtResource( 9 )
+texture_disabled = ExtResource( 17 )
 
 [node name="SwarmTornado" type="TextureButton" parent="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer"]
+visible = false
 margin_left = 72.0
 margin_right = 136.0
 margin_bottom = 64.0
 disabled = true
 shortcut = SubResource( 9 )
-texture_normal = ExtResource( 14 )
-texture_hover = SubResource( 5 )
-texture_disabled = ExtResource( 9 )
+texture_normal = SubResource( 16 )
+texture_hover = ExtResource( 20 )
+texture_disabled = ExtResource( 18 )
 
 [node name="AwakeTheKraken" type="TextureButton" parent="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer"]
-margin_left = 144.0
-margin_right = 208.0
+margin_left = 72.0
+margin_right = 136.0
 margin_bottom = 64.0
 disabled = true
-shortcut = SubResource( 11 )
-texture_normal = ExtResource( 14 )
-texture_hover = SubResource( 5 )
-texture_disabled = ExtResource( 9 )
+shortcut = SubResource( 9 )
+texture_normal = SubResource( 5 )
+texture_hover = ExtResource( 20 )
+texture_disabled = ExtResource( 18 )
 
 [node name="Swarm" type="HBoxContainer" parent="CanvasLayer/SwarmContainer/VBoxContainer"]
 margin_top = 72.0
-margin_right = 208.0
+margin_right = 136.0
 margin_bottom = 104.0
 
 [node name="Label" type="Label" parent="CanvasLayer/SwarmContainer/VBoxContainer/Swarm"]
@@ -306,14 +388,16 @@ mouse_filter = 1
 text = "0"
 
 [node name="Debug" type="VBoxContainer" parent="CanvasLayer"]
-visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -136.0
-margin_top = -112.0
+margin_top = -152.0
+grow_horizontal = 0
+grow_vertical = 0
 theme = ExtResource( 8 )
+script = ExtResource( 16 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -336,6 +420,13 @@ margin_right = 136.0
 margin_bottom = 112.0
 mouse_filter = 1
 text = "89453.41323"
+
+[node name="FPS" type="Label" parent="CanvasLayer/Debug"]
+margin_top = 120.0
+margin_right = 136.0
+margin_bottom = 152.0
+mouse_filter = 1
+text = "FPS:   0"
 
 [node name="Tween" type="Tween" parent="."]
 pause_mode = 2
@@ -448,7 +539,7 @@ scroll_active = false
 [connection signal="timeout" from="ShipSpawnTimer" to="." method="_on_ShipSpawnTimer_timeout"]
 [connection signal="pressed" from="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/FishRain" to="." method="_on_FishRain_pressed"]
 [connection signal="pressed" from="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/SwarmTornado" to="." method="_on_SwarmTornado_pressed"]
-[connection signal="pressed" from="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/AwakeTheKraken" to="." method="_on_AwakeTheKraken_pressed"]
+[connection signal="pressed" from="CanvasLayer/SwarmContainer/VBoxContainer/HBoxContainer/AwakeTheKraken" to="." method="_on_SwarmTornado_pressed"]
 [connection signal="mouse_entered" from="Menu/Menu/Start" to="." method="_on_Button_mouse_entered"]
 [connection signal="pressed" from="Menu/Menu/Start" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="Menu/Menu/Start" to="." method="_on_Start_pressed"]

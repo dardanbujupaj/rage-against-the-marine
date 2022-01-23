@@ -2,9 +2,9 @@ extends "res://util/PersistentProperties.gd"
 
 var font: String = "ChelseaMarket-Regular" setget _set_font, _get_font
 
-var main_volume: float = 1 setget _set_main_volume
-var sound_volume: float = 1 setget _set_sound_volume
-var music_volume: float = 1 setget _set_music_volume
+var main_volume: float = 0.75 setget _set_main_volume
+var sound_volume: float = 0.75 setget _set_sound_volume
+var music_volume: float = 0.75 setget _set_music_volume
 
 var screenshake_intensity: float = 1.0
 

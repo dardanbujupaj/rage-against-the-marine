@@ -32,9 +32,11 @@ func _process(delta: float) -> void:
 			var target := offset * 200
 			var mouse_distance := -get_local_mouse_position()
 			target += (mouse_distance).normalized() / max(1.0, mouse_distance.length_squared() / 1000) * 20
-			position = lerp(position, target, 5 * delta)
+			position = lerp(position, target, 5.0  * delta)
+			# rotation = lerp_angle(rotation, position.angle_to(target), 5.0 * delta)
 			
 		State.RAIN_RISING:
+			# rotation = lerp_angle(rotation, -PI / 2, 5.0  * delta)
 			global_position.y = lerp(global_position.y, -150, 0.05)
 			
 			if global_position.y < -100:
@@ -43,6 +45,7 @@ func _process(delta: float) -> void:
 				state = State.RAIN_FALLING
 				print("fall")
 		State.RAIN_FALLING:
+			# rotation = lerp_angle(rotation, PI / 2, 5.0  * delta)
 			var height_before := global_position.y
 			
 			global_position.y += 500 * delta
@@ -50,7 +53,7 @@ func _process(delta: float) -> void:
 			if height_before < WATER_LEVEL and global_position.y >= WATER_LEVEL:
 				SoundEngine.play_sound("SmallSplash" + str(randi() % 5 + 1))
 			
-			if global_position.y > 2000:
+			if global_position.y > 1000:
 				queue_free()
 
 

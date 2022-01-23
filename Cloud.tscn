@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Cloud.gd" type="Script" id=1]
+
+[sub_resource type="Shader" id=18]
+code = "shader_type canvas_item;
+
+
+void fragment() {
+	vec2 offset = (UV - vec2(0.5, 0.5)) * 2.0;
+	float radius = sqrt(offset.x * offset.x + offset.y * offset.y);
+	
+	COLOR = vec4(1.0);
+	COLOR.a = texture(TEXTURE, UV + vec2(TIME, TIME) * 0.05).r - radius;
+}"
+
+[sub_resource type="ShaderMaterial" id=19]
+shader = SubResource( 18 )
+
+[sub_resource type="OpenSimplexNoise" id=17]
+
+[sub_resource type="NoiseTexture" id=16]
+height = 256
+seamless = true
+noise = SubResource( 17 )
+
+[node name="Cloud" type="Sprite"]
+material = SubResource( 19 )
+texture = SubResource( 16 )
+script = ExtResource( 1 )

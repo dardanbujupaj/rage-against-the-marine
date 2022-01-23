@@ -127,13 +127,14 @@ func process_state() -> void:
 				SoundEngine.play_sound("TutorialSuccess")
 				tutorial_text.bbcode_text = "Freed fishes can help you fight! Press %s or the button top left to unleash a 'Fish Rain'!" % str(Keymap.input_to_text(Keymap.input_for_action("swarm_action_1")))
 				tutorial_state = TutorialState.ACTIONS
-				
 		TutorialState.ACTIONS:
 			if last_action != "":
 				SoundEngine.play_sound("TutorialSuccess")
 				tutorial_text.bbcode_text = "Nice! %s\nNow go and free as many fish as you can!" % last_action
 				tutorial_state = TutorialState.FINISHED
 				yield(get_tree().create_timer(5), "timeout")
+				
+				
 				tutorial.hide()
 			
 
@@ -156,7 +157,7 @@ func update_water(offset: float = 0.0) -> void:
 	var poly := []
 	for i in range(SEGMENTS + 1):
 		var x = float(i) / SEGMENTS * viewport_rect.size.x
-		var y = WATER_HEIGHT + noise.get_noise_1d(x + offset) * 20.0
+		var y = WATER_HEIGHT + noise.get_noise_1d(x + offset) * 20.0 + noise.get_noise_1d(x + offset + OS.get_ticks_msec() / 2.0) * 10.0
 		poly.append(Vector2(x, y))
 	
 	poly.append_array([
