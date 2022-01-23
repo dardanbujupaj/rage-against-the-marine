@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Character.tscn" type="PackedScene" id=2]
@@ -25,6 +25,7 @@
 [ext_resource path="res://scenes/actions/fish_rain_button2.png" type="Texture" id=23]
 [ext_resource path="res://scenes/actions/fish_rain_button4.png" type="Texture" id=24]
 [ext_resource path="res://ShortcutLabel.gd" type="Script" id=25]
+[ext_resource path="res://title.png" type="Texture" id=26]
 
 [sub_resource type="Shader" id=13]
 code = "shader_type canvas_item;
@@ -642,6 +643,16 @@ margin_right = 284.0
 margin_bottom = 107.0
 text = "Score: 0"
 
+[node name="TextureRect" type="TextureRect" parent="Menu"]
+margin_left = 71.0
+margin_top = 19.0
+margin_right = 583.0
+margin_bottom = 531.0
+texture = ExtResource( 26 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Tutorial" type="CanvasLayer" parent="."]
 
 [node name="Tutorial" type="MarginContainer" parent="Tutorial"]
@@ -686,8 +697,8 @@ scroll_active = false
 [connection signal="pressed" from="Menu/Menu/Start" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="Menu/Menu/Start" to="." method="_on_Start_pressed"]
 [connection signal="mouse_entered" from="Menu/Menu/Keymap" to="." method="_on_Button_mouse_entered"]
-[connection signal="pressed" from="Menu/Menu/Keymap" to="." method="_on_Keymap_pressed"]
 [connection signal="pressed" from="Menu/Menu/Keymap" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Menu/Menu/Keymap" to="." method="_on_Keymap_pressed"]
 [connection signal="mouse_entered" from="Menu/Menu/Settings" to="." method="_on_Button_mouse_entered"]
 [connection signal="pressed" from="Menu/Menu/Settings" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="Menu/Menu/Settings" to="." method="_on_Settings_pressed"]
