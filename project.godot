@@ -83,6 +83,11 @@ swarm_action_4={
  ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="fish"
+2d_physics/layer_2="ship"
+
 [physics]
 
 common/enable_pause_aware_picking=true

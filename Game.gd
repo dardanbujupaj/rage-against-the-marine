@@ -66,7 +66,7 @@ enum TutorialState {
 func _ready() -> void:
 	
 	if OS.has_feature("debug"):
-		debug.show()
+		pass #debug.show()
 	
 	MusicEngine.play_song("Water")
 	
@@ -122,7 +122,7 @@ func process_state() -> void:
 			tutorial_state = TutorialState.JUMP
 			tutorial_text.bbcode_text = "Press and hold [u]%s[/u] to jump.\nJump higher!" % str(Keymap.input_to_text(Keymap.input_for_action("jump")))
 		TutorialState.JUMP:
-			if character.position.y < 0:
+			if character.position.y < 50.0:
 				tutorial_state = TutorialState.SHIP
 				SoundEngine.play_sound("TutorialSuccess")
 				swarm_actions.hide()
@@ -268,5 +268,37 @@ func _on_SwarmTornado_pressed() -> void:
 
 
 func _on_AwakeTheKraken_pressed() -> void:
+	var state_machine = $AnimationTree.get("parameters/playback")
+	if state_machine.get_current_node() == "RESET":
+		last_action = "You awoke the Kraken!"
+		
+		state_machine.travel("awaken")
+
+
+
+func kraken_attack() -> void:
+	var tween = $KrakenTween
+	print("attack")
+	for ship in get_tree().get_nodes_in_group("ships"):
+		print("attack" + str(ship))
+		var kraken_arm = preload("res://KrakenArm.tscn").instance()
+		kraken_arm.position = Vector2(545, 800)
+		add_child(kraken_arm)
+		
+		tween.interpolate_property(kraken_arm, "position", kraken_arm.position, ship.position, 0.5, Tween.TRANS_QUAD, Tween.EASE_IN)
+		tween.interpolate_property(kraken_arm, "position", ship.position, kraken_arm.position, 2.0, Tween.TRANS_QUAD, Tween.EASE_IN, 2.0)
+		tween.interpolate_callback(kraken_arm, 4.0, "queue_free")
 	
-	last_action = "You awoke the Kraken!"
+	tween.start()
+
+var current_clear_color: Color = ProjectSettings.get("rendering/environment/default_clear_color")
+
+
+func set_background_color(color: Color) -> void:
+	
+	$BackgroundTween.stop_all()
+	
+	$BackgroundTween.interpolate_method(VisualServer, "set_default_clear_color", current_clear_color, color, 2.0)
+	$BackgroundTween.start()
+	
+	current_clear_color = color
