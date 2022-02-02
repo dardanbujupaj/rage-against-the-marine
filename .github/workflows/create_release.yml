@@ -62,18 +62,18 @@ jobs:
 
     - name: Build for linux
       run: |
-        ./bin/Godot_v\*_linux_headless.64 --no-window --export linux 
+        ./bin/Godot_v*_linux_headless.64 --no-window --export linux 
         7z a -sdel release/${{ env.PACKAGE_PREFIX }}-linux.zip build/*
 
     - name: Build html export
       run: |
-        ./bin/Godot_v\*_linux_headless.64 --no-window --export html 
+        ./bin/Godot_v*_linux_headless.64 --no-window --export html 
         7z a -sdel release/${{ env.PACKAGE_PREFIX }}-html.zip build/*
 
       # Build windows export on linux, because windows is dumb
     - name: Build windows export
       run: |
-        ./bin/Godot_v\*_linux_headless.64 --no-window --export windows 
+        ./bin/Godot_v*_linux_headless.64 --no-window --export windows 
         7z a -sdel release/${{ env.PACKAGE_PREFIX }}-windows.zip build/*
     
     - uses: actions/upload-artifact@v2
