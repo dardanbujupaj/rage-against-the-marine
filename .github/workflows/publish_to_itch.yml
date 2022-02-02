@@ -30,7 +30,7 @@ jobs:
       - run: gh release download ${{ env.VERSION }} -p "${FILE}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FILE: ${{ env.PACKAGE_PREFIX }}-${{matrix.target}}.zip
+          FILE: ${{ env.PACKAGE_PREFIX }}-${{ env.VERSION }}-${{matrix.target}}.zip
 
       # download specified butler version
       - name: setup butler
@@ -50,11 +50,11 @@ jobs:
         run: |
           ls -lah
           echo ${{ env.VERSION }}
-          ./butler push "${PACKAGE}" "${ITCH_USER}/${ITCH_GAME}:${CHANNEL}" --userversion ${{ env.VERSION }}
+          ./butler push "${FILE}" "${ITCH_USER}/${ITCH_GAME}:${CHANNEL}" --userversion ${{ env.VERSION }}
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_CREDENTIALS }}
           CHANNEL: ${{ matrix.TARGET }}
           ITCH_GAME: ${{ env.GAME_TITLE }}
           ITCH_USER: ${{ env.ITCH_USER }}
-          PACKAGE: ${{ env.PACKAGE_PREFIX }}-${{ matrix.target}}.zip
+          FILE: ${{ env.PACKAGE_PREFIX }}-${{ env.VERSION }}-${{matrix.target}}.zip
       
