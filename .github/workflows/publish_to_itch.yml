@@ -55,5 +55,5 @@ jobs:
           CHANNEL: ${{ matrix.TARGET }}
           ITCH_GAME: ${{ env.GAME_TITLE }}
           ITCH_USER: ${{ env.ITCH_USER }}
-          PACKAGE: ${{ eng.PACKAGE_PREFIX }}-${{ matrix.target}}.zip
+          PACKAGE: ${{ env.PACKAGE_PREFIX }}-${{ matrix.target}}.zip
       

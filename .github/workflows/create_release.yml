@@ -15,27 +15,13 @@ env:
 
 jobs:
   # job id, can be anything
-  CreateReleaseExports:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-    # Always use ubuntu-latest for this action
-    runs-on: ${{matrix.os}}
-
-    # Job name, can be anything
+  BuildOnLinux:
+    runs-on: ubuntu-latest
     name: Export Game
+
     steps:
-      # Always include the checkout step so that 
-      # your project is available for Godot to export
     - name: checkout
       uses: actions/checkout@v2
-      # Ensure that you get the entire project history
-      with:
-        fetch-depth: 0
-      # separate step to extract the version from the tag name
-    - name: setup zx
-      run: npm install -g zx
 
     - name: Cache godot binaries and templates
       id: cache
@@ -45,11 +31,29 @@ jobs:
           ./bin
           /home/runner/.local/share/godot/templates
           /Users/runner/Library/Application Support/Godot/templates
-        key: godot-${{ env.GODOT_VERSION }}-${{ runner.os }}
+        key: godot-${{ env.GODOT_VERSION }}-linux
 
     - name: Install Godot + Templates
       if: steps.cache.outputs.cache-hit != 'true'
-      run: zx ./scripts/download-godot.mjs ${{env.GODOT_VERSION}}
+      # run: zx ./scripts/download-godot.mjs ${{env.GODOT_VERSION}}
+      run: |
+        mkdir bin
+
+        # Prereleases have the prerelease identifier (e.g. 'beta1') while stable releases have 'stable'
+        SUFFIX=$(if [ -z "$PRERELEASE" ];then echo stable; else echo $PRERELEASE;  fi)
+
+        BASE_URL=https://downloads.tuxfamily.org/godotengine/$GODOT_VERSION/$PRERELEASE/Godot_v$GODOT_VERSION-$SUFFIX
+        
+        # Download and extract godot binary
+        curl $BASE_URL"_x11.64.zip" -o bin/godot.zip
+        # curl $BASE_URL"_osx.universal.zip" -o bin/godot.zip
+        7z x -y bin/godot.zip -obin
+
+        # Download and extract export templates
+        curl $BASE_URL"_export_templates.tpz" -o bin/templates.zip
+        7z e -y bin/templates.zip -o"/home/runner/.local/share/godot/templates/$GODOT_VERSION.$SUFFIX"
+        # 7z e -y bin/templates.zip -o"~/Library/Application Support/Godot/templates/$GODOT_VERSION.$SUFFIX"
+
 
     - name: Build game
       run: zx ./scripts/build-release.mjs ${{env.VERSION}}
