@@ -54,7 +54,7 @@ jobs:
         7z e -y bin/templates.zip -o"/home/runner/.local/share/godot/templates/$GODOT_VERSION.$SUFFIX"
         # 7z e -y bin/templates.zip -o"~/Library/Application Support/Godot/templates/$GODOT_VERSION.$SUFFIX"
 
-    - run: mkdir build
+    - run: mkdir -p build
 
     - name: Build for linux
       run: |
