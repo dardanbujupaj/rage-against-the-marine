@@ -1,25 +1,21 @@
 on: 
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g. v1.0.0)'
+        required: true
+        type: string
 
 env:
+  # Godot version to use for build
   GODOT_VERSION: 3.5-beta1
+  # Prefix of the release asset (zip files)
+  PACKAGE_PREFIX: ${{ github.event.repository.name }} # use gh repository name
+  VERSION: ${{ github.event.inputs.version }} # this only works with workflow dispatch, for automatic releases the version has to supplied somehow else
 
 jobs:
-  DefineVersion:
-    runs-on: ubuntu-latest
-    name: Define Version
-    outputs:
-      VERSION: ${{ steps.version.outputs.version }}
-
-    steps:
-    - id: version
-      name: Version from Date and Build-nr
-      run: echo "::set-output name=version::$(date +%Y%m%d).$GITHUB_RUN_NUMBER"
-
-
   # job id, can be anything
   CreateReleaseExports:
-    needs: DefineVersion
     strategy:
       fail-fast: false
       matrix:
@@ -56,18 +52,17 @@ jobs:
       run: zx ./scripts/download-godot.mjs ${{env.GODOT_VERSION}}
 
     - name: Build game
-      run: zx ./scripts/build-release.mjs ${{needs.DefineVersion.outputs.VERSION}}
+      run: zx ./scripts/build-release.mjs ${{env.VERSION}}
     
 
     - name: Build html export
       if: ${{ matrix.os == 'ubuntu-latest' }}
-      run: zx ./scripts/build-release.mjs ${{needs.DefineVersion.outputs.VERSION}} html
-
+      run: zx ./scripts/build-release.mjs ${{env.VERSION}} html
 
       # Build windows export on linux, because windows is dumb
     - name: Build windows export
       if: ${{ matrix.os == 'ubuntu-latest' }}
-      run: zx ./scripts/build-release.mjs ${{needs.DefineVersion.outputs.VERSION}} windows
+      run: zx ./scripts/build-release.mjs ${{env.VERSION}} windows
     - uses: actions/upload-artifact@v2
       with:
         name: release
@@ -91,8 +86,8 @@ jobs:
     - run: ls ./release -lah
     - id: create-release
       run: |
-        gh release create $VERSION --target $TARGET --notes "$VERSION" --title "$VERSION" release/*
+        gh release create $VERSION --target $TARGET --generate-notes release/*
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        VERSION: ${{needs.DefineVersion.outputs.VERSION}}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # special GITHUB token defined in secrets, to allow automatic start of following action
+        VERSION: ${{env.VERSION}}
         TARGET: ${{ github.sha }}
