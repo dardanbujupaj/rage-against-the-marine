@@ -21,6 +21,10 @@ jobs:
         target: [html, windows, macos, linux]
     runs-on: ubuntu-latest
     steps:
+      # checkout repo, so that gh cli works correctly
+      - name: checkout
+        uses: actions/checkout@v2
+      # download asset
       - run: gh release download ${GITHUB_REF##*/} -p "${FILE}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
