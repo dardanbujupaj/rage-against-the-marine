@@ -78,7 +78,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: release
-        path: ./release/*.zip
+        path: /tmp/release/*.zip
 
 
 
@@ -126,12 +126,12 @@ jobs:
     - name: Build for macos
       run: |
         ./bin/Godot.app/Contents/MacOS/Godot --no-window --export macos /tmp/build/${{ env.PACKAGE_PREFIX }}-${{ env.VERSION }}-macos.dmg
-        7z a -sdel release/${{ env.PACKAGE_PREFIX }}-${{ env.VERSION }}-macos.zip /tmp/build/*
+        7z a -sdel /tmp/release/${{ env.PACKAGE_PREFIX }}-${{ env.VERSION }}-macos.zip /tmp/build/*
 
     - uses: actions/upload-artifact@v2
       with:
         name: release
-        path: ./release/*.zip
+        path: /tmp/release/*.zip
 
 
   FinishRelease:
