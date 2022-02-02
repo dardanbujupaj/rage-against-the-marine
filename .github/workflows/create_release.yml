@@ -9,6 +9,7 @@ on:
 env:
   # Godot version to use for build
   GODOT_VERSION: 3.5
+  # Prerelease if applicable (e.g beta1), else empty
   GODOT_PRERELEASE: beta1
   # Prefix of the release asset (zip files)
   PACKAGE_PREFIX: ${{ github.event.repository.name }} # use gh repository name

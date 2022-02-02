@@ -13,6 +13,7 @@ env:
   GAME_TITLE: ${{ github.event.repository.name }} # use gh repository name
   # Username on itch
   ITCH_USER: ${{ github.repository_owner }}
+  VERSION: ${{github.event.release.tag_name}}
 
 jobs:
   publish_to_itch:
@@ -26,7 +27,7 @@ jobs:
         uses: actions/checkout@v2
         
       # download asset for effective 
-      - run: gh release download ${GITHUB_REF##*/} -p "${FILE}"
+      - run: gh release download ${{ env.VERSION }} -p "${FILE}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FILE: ${{ env.PACKAGE_PREFIX }}-${{matrix.target}}.zip
@@ -48,8 +49,8 @@ jobs:
         id: deploy
         run: |
           ls -lah
-          echo ${GITHUB_REF##*/}
-          ./butler push "${PACKAGE}" "${ITCH_USER}/${ITCH_GAME}:${CHANNEL}" --userversion ${GITHUB_REF##*/}
+          echo ${{ env.VERSION }}
+          ./butler push "${PACKAGE}" "${ITCH_USER}/${ITCH_GAME}:${CHANNEL}" --userversion ${{ env.VERSION }}
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_CREDENTIALS }}
           CHANNEL: ${{ matrix.TARGET }}
