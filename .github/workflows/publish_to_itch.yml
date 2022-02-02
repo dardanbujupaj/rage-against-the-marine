@@ -8,9 +8,9 @@ env:
   # Version of the itch butler cli used to push
   BUTLER_VERSION: 15.21.0
   # Prefix of the release asset (zip files) -> has to match with the one from create_release.yml
-  PACKAGE_PREFIX: ${{ github.event.repository.name }}
+  PACKAGE_PREFIX: ${{ github.event.repository.name }} # use gh repository name
   # Game title (url) on itch page
-  GAME_TITLE: ${{ github.event.repository.name }}
+  GAME_TITLE: ${{ github.event.repository.name }} # use gh repository name
   # Username on itch
   ITCH_USER: ${{ github.repository_owner }}
 
@@ -24,15 +24,14 @@ jobs:
       # checkout repo, so that gh cli works correctly
       - name: checkout
         uses: actions/checkout@v2
-      # download asset
+        
+      # download asset for effective 
       - run: gh release download ${GITHUB_REF##*/} -p "${FILE}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FILE: ${{ env.PACKAGE_PREFIX }}-${{matrix.target}}.zip
-      # - uses: dsaltares/fetch-gh-release-asset@master
-        # with:
-          # file: ${{ env.PACKAGE_PREFIX }}-${{matrix.target}}.zip
-          # token: ${{ secrets.GH_TOKEN }}
+
+      # download specified butler version
       - name: setup butler
         id: setup-butler
         run: |
@@ -44,7 +43,8 @@ jobs:
           ./butler -V
         env:
           BUTLER_VERSION: ${{env.BUTLER_VERSION}}
-      - name: deploy to itch.io (Windows)
+
+      - name: deploy to itch.io
         id: deploy
         run: |
           ls -lah
@@ -55,5 +55,5 @@ jobs:
           CHANNEL: ${{ matrix.TARGET }}
           ITCH_GAME: ${{ env.GAME_TITLE }}
           ITCH_USER: ${{ env.ITCH_USER }}
-          PACKAGE: ${{ github.event.repository.name }}-${{ matrix.target}}.zip
+          PACKAGE: ${{ eng.PACKAGE_PREFIX }}-${{ matrix.target}}.zip
       
