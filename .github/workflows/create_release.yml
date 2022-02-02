@@ -47,13 +47,11 @@ jobs:
         
         # Download and extract godot binary
         curl $BASE_URL"_linux_headless.64.zip" -o bin/godot.zip
-        # curl $BASE_URL"_osx.universal.zip" -o bin/godot.zip
         7z x -y bin/godot.zip -obin
 
         # Download and extract export templates
         curl $BASE_URL"_export_templates.tpz" -o bin/templates.zip
         7z e -y bin/templates.zip -o"/home/runner/.local/share/godot/templates/$GODOT_VERSION.$SUFFIX"
-        # 7z e -y bin/templates.zip -o"~/Library/Application Support/Godot/templates/$GODOT_VERSION.$SUFFIX"
       env:
         GODOT_VERSION: ${{ env.GODOT_VERSION }}
         GODOT_PRERELEASE: ${{ env.GODOT_PRERELEASE }}
@@ -82,8 +80,61 @@ jobs:
         path: ./release/*.zip
 
 
+
+  BuildOnMac:
+    runs-on: macos-latest
+    name: Export Game (macos)
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+
+    - name: Cache godot binaries and templates
+      id: cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ./bin
+          /home/runner/.local/share/godot/templates
+          /Users/runner/Library/Application Support/Godot/templates
+        key: godot-${{ env.GODOT_VERSION }}-${{ env.GODOT_PRERELEASE }}-macos
+
+    - name: Install Godot + Templates
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: |
+        mkdir bin
+
+        # Prereleases have the prerelease identifier (e.g. 'beta1') while stable releases have 'stable'
+        SUFFIX=$(if [ -z "$GODOT_PRERELEASE" ];then echo stable; else echo $GODOT_PRERELEASE;  fi)
+
+        BASE_URL=https://downloads.tuxfamily.org/godotengine/$GODOT_VERSION/$GODOT_PRERELEASE/Godot_v$GODOT_VERSION-$SUFFIX
+        
+        # Download and extract godot binary
+        curl $BASE_URL"_osx.universal.zip" -o bin/godot.zip
+        7z x -y bin/godot.zip -obin
+
+        # Download and extract export templates
+        curl $BASE_URL"_export_templates.tpz" -o bin/templates.zip
+        7z e -y bin/templates.zip -o"~/Library/Application Support/Godot/templates/$GODOT_VERSION.$SUFFIX"
+      env:
+        GODOT_VERSION: ${{ env.GODOT_VERSION }}
+        GODOT_PRERELEASE: ${{ env.GODOT_PRERELEASE }}
+
+    - run: mkdir -p build
+
+    - name: Build for macos
+      run: |
+        ./bin/Godot.app/Contents/MacOS/Godot --no-window --export macos 
+        7z a -sdel release/${{ env.PACKAGE_PREFIX }}-macos.zip build/*
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: release
+        path: ./release/*.zip
+
+
   FinishRelease:
-    needs: [BuildOnLinux]
+    needs: [BuildOnLinux, BuildOnMac]
     runs-on: ubuntu-latest
     steps:
     - name: checkout
