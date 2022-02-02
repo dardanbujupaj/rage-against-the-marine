@@ -56,7 +56,9 @@ jobs:
 
 
     - name: Build game
-      run: zx ./scripts/build-release.mjs ${{env.VERSION}}
+      run: |
+        npm install -g zx
+        zx ./scripts/build-release.mjs ${{env.VERSION}}
     
 
     - name: Build html export
