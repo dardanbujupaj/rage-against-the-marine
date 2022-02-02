@@ -8,7 +8,8 @@ on:
 
 env:
   # Godot version to use for build
-  GODOT_VERSION: 3.5-beta1
+  GODOT_VERSION: 3.5
+  GODOT_PRERELEASE: beta1
   # Prefix of the release asset (zip files)
   PACKAGE_PREFIX: ${{ github.event.repository.name }} # use gh repository name
   VERSION: ${{ github.event.inputs.version }} # this only works with workflow dispatch, for automatic releases the version has to supplied somehow else
@@ -31,7 +32,7 @@ jobs:
           ./bin
           /home/runner/.local/share/godot/templates
           /Users/runner/Library/Application Support/Godot/templates
-        key: godot-${{ env.GODOT_VERSION }}-linux
+        key: godot-${{ env.GODOT_VERSION }}-${{ env.GODOT_PRERELEASE }}-linux
 
     - name: Install Godot + Templates
       if: steps.cache.outputs.cache-hit != 'true'
@@ -40,12 +41,12 @@ jobs:
         mkdir bin
 
         # Prereleases have the prerelease identifier (e.g. 'beta1') while stable releases have 'stable'
-        SUFFIX=$(if [ -z "$PRERELEASE" ];then echo stable; else echo $PRERELEASE;  fi)
+        SUFFIX=$(if [ -z "$GODOT_PRERELEASE" ];then echo stable; else echo $GODOT_PRERELEASE;  fi)
 
-        BASE_URL=https://downloads.tuxfamily.org/godotengine/$GODOT_VERSION/$PRERELEASE/Godot_v$GODOT_VERSION-$SUFFIX
+        BASE_URL=https://downloads.tuxfamily.org/godotengine/$GODOT_VERSION/$GODOT_PRERELEASE/Godot_v$GODOT_VERSION-$SUFFIX
         
         # Download and extract godot binary
-        curl $BASE_URL"_x11.64.zip" -o bin/godot.zip
+        curl $BASE_URL"_linux_headless.64.zip" -o bin/godot.zip
         # curl $BASE_URL"_osx.universal.zip" -o bin/godot.zip
         7z x -y bin/godot.zip -obin
 
@@ -53,6 +54,9 @@ jobs:
         curl $BASE_URL"_export_templates.tpz" -o bin/templates.zip
         7z e -y bin/templates.zip -o"/home/runner/.local/share/godot/templates/$GODOT_VERSION.$SUFFIX"
         # 7z e -y bin/templates.zip -o"~/Library/Application Support/Godot/templates/$GODOT_VERSION.$SUFFIX"
+      env:
+        GODOT_VERSION: ${{ env.GODOT_VERSION }}
+        GODOT_PRERELEASE: ${{ env.GODOT_PRERELEASE }}
 
     - run: mkdir -p build
 
