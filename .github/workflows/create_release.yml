@@ -73,7 +73,7 @@ jobs:
         path: ./release/*.zip
 
   FinishRelease:
-    needs: [DefineVersion, CreateReleaseExports]
+    needs: [CreateReleaseExports]
     runs-on: ubuntu-latest
     steps:
     - name: checkout
