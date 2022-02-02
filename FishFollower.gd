@@ -61,3 +61,7 @@ func _process(delta: float) -> void:
 func fish_rain() -> void:
 	remove_from_group("available_fish")
 	state = State.RAIN_RISING
+	
+func kraken() -> void:
+	remove_from_group("available_fish")
+	state = State.RAIN_FALLING
